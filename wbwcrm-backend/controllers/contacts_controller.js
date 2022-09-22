@@ -3,7 +3,7 @@ import Contact from '../models/contact.js';
 
 export const index = (req, res, next) =>{
     // The index method for contacts that gives us all of them
-    Contact.all('contacts')
+    Contact.all()
     .then(([rows, fieldData]) => {
         res.json(rows);
     })
@@ -12,7 +12,7 @@ export const index = (req, res, next) =>{
 
 export const show = (req, res, next) => {
     //Uses the method findByID from the contact.js models file. This is the show method where we only get one element
-    Contact.findByID(req.params.id)
+    Contact.findByID(req.body.id)
     .then(([contact]) => {
         res.json(contact);
     } )
@@ -21,15 +21,17 @@ export const show = (req, res, next) => {
 
 
 export const create = (req, res, next) => {
-    // You shouldn't need new since we're not doing the rendering on the server side. Instead, we simply do the create function. This creates (and saves) a new contact element
+    // Here we create new customers (or contacts, I can never seem to agree on what they're called, but nor can Richard so it's kind of a moot point...)
+    //Need to figure out how to properly validate if company already exists
     const contact = new Contact(
-        null, req.params.company, req.params.name, req.params.email, req.params.number, req.params.title, req.params.old_address, req.params.new_address, req.params.category,  
-        req.params.broker_name, req.params.broker_company, req.params.broker_number, req.params.broker_email, req.params.architect_name, req.params.architect_company, req.params.architect_number, req.params.architect_email,  
-        req.params.consultant_name, req.params.consultant_company, req.params.consultant_number, req.params.consultant_email, req.params.notes
+        null, req.body.company, req.body.name, req.body.email, req.body.number, req.body.title, req.body.old_address, req.body.new_address, req.body.category,  
+        req.body.broker_name, req.body.broker_company, req.body.broker_number, req.body.broker_email, req.body.architect_name, req.body.architect_company, req.body.architect_number, req.body.architect_email,  
+        req.body.consultant_name, req.body.consultant_company, req.body.consultant_number, req.body.consultant_email, req.body.notes
         )
     Contact.companyValidator(contact.company)
     .then(([contact]) => {
         if (contact){
+            console.log("Company already has a contact")
             res.json({message: "company already has a contact"});
         }
         else{
@@ -45,9 +47,9 @@ export const create = (req, res, next) => {
     
 export const update = (req, res, next) => {
     // Rather than make a traditional update method, we'd just have the changes to the notes be done on the client side via axios requests in which case we would catch those here and then update it
-    Contact.findByID(req.params.id)
+    Contact.findByID(req.body.id)
     .then(([contact]) => {
-        contact.updateNotes(req.params.notes)
+        contact.updateNotes(req.body.notes)
         .then(res.json({message: "Notes updated successfully"}))
         .catch(err => res.json({message: "We made an oopsie"}))
     })
@@ -55,7 +57,7 @@ export const update = (req, res, next) => {
 
 export const destroy = (req, res, next) => {
     // Here is when we want to remove an existing contact
-    Contact.findByID(req.params.id)
+    Contact.findByID(req.body.id)
     .then(([contact]) => {
         contact.deleteMe()
         .then(() => res.json({message: "Contact has been deleted successfully"}))

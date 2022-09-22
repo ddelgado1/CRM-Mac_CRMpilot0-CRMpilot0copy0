@@ -11,3 +11,5 @@ Finally I have to ensure everything works
 
 List of paths completed: 
 (Most of) Index (just need to get that workers things setup, but until I actually do the workers section, I can't so for now this is it)
+
+I really should make it so that everything that's contact should be customer. I hate how confusing it is but customer is the correct term

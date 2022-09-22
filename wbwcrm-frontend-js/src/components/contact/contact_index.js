@@ -1,7 +1,7 @@
 import './contact.css'
 import { getContacts } from '../../actions/contact';
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -9,8 +9,6 @@ const Index = () => {
     useEffect(() => {
         dispatch(getContacts())
       }, [dispatch]);
-    
-    console.log(contacts)
     
     return(
         

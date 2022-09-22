@@ -4,6 +4,7 @@ import './index.css';
 
 import App from './App';
 import Index from './components/contact/contact_index.js';
+import New from './components/contact/new.js';
 
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
@@ -24,6 +25,7 @@ root.render(
             <Route path="/" element={<App />} />
             {/* <Route index element={<Home />} */}
               <Route path="contacts" element={<Index />} />
+              <Route path="new_contact" element={<New />} />
           </Routes>
         </BrowserRouter>
       </PersistGate>

@@ -1,5 +1,8 @@
 import {useState, useEffect} from 'react';
 import { MultiSelect } from "react-multi-select-component";
+import { useSelector, useDispatch } from 'react-redux';
+import { getWorkers } from '../../actions/worker.js';
+import {createContact} from '../../actions/contact.js';
 
 import './contact.css';
 
@@ -28,23 +31,17 @@ const New = () => {
          consultant_email: ""
         });
 
-    const [options, setOptions] = useState([]); //These are the options for the workers select tag
     const [selected, setSelected] = useState([]); //This determines what has and hasn't been selected yet with workers
 
+    const dispatch = useDispatch();
+    const workers = useSelector((state) => state.workers)
+
     useEffect(() => {
-        const names = ['zach', 'greg', 'mama'];
-        for (const name of names){
-            console.log(name)
-            setOptions(oldOptions => ([...oldOptions, {label: name, value: name}]))
-        }
-        console.log('here1')
-      }, []);
-    /* 
-    I need to make a useEffect thing here because I need to get the workers that are listed so that the select thing works
-    For now, I'll just use the dummy stuff in the worker thing currently
-    */
+        dispatch(getWorkers())
+      }, [dispatch]);
+
     const handleSubmit = (e) => {
-        console.log("Here, I will run a dispatch that will then send the info to the backend. Since I'm doing this on the pc I'm doing this")
+        dispatch(createContact(customer))
     }
 
     
@@ -56,7 +53,7 @@ const New = () => {
     }
     return(
         <>
-            <h1>Create a new Contact</h1>
+            <h1>Create a new Customer</h1>
             <form id="customer_form" onSubmit={handleSubmit}>
                 <label>
                     Company: 
@@ -70,7 +67,7 @@ const New = () => {
                     Workers: 
                     <div id="multi_select">
                     <MultiSelect 
-                        options={options}
+                        options={workers.workers}
                         value={selected}
                         onChange={setSelected}
                         labelledBy="Select"
