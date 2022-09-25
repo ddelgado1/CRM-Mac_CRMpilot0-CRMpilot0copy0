@@ -1,37 +1,85 @@
-import {useState} from 'react';
-import { MultiSelect } from "react-multi-select-component";
+import { useSelector, useDispatch } from 'react-redux';
+import { patchNotes, destroyContact } from '../../actions/contact';
 
 import './contact.css';
 
 const Show = () => {
-    const [notes, setNotes] = useState("");
+    /* 
+        Since we're using redux, we just need to useSelector to get the information about the current worker (which we will set
+            when they press the button to the right of the index page's individual elements)
 
-    /* Since we don't have access to the database, we will need to just assume we know the customer information using dummy code */
-    const handleSubmit = (e) => {
-        console.log("Here, I will run a dispatch that will then send the info to the backend. Since I'm doing this on the pc I'm doing this")
-        console.log(notes)
+    */    
+
+    const dispatch = useDispatch();
+    const customerChosen = useSelector((state) => state.contacts.selected_customer) //This is the current customer we get from redux
+    
+    
+    const handleChange = (event) => {
+        dispatch(patchNotes({value: event.target.value, id: customerChosen.id}));
+    
     }
 
-    
-    const handleChange = (e) => {
-        setNotes(e.target.value);
+    const handleDeletion = (event) => {
+        /* Want an alert to pop up asking if they're sure they want to delete it. That alert has a button which deletes on click */
+        //ALERT
+        //if alert delete button pressed, run delete and reroute
+        //else do nothing
     }
 
     return(
         <>
-            <div id="company_div">
+            {/* We should be able to render only the elements that we need to. Just need to figure out how to make a for loop work within this */}
+            <h2>Notes:</h2>
+            <textarea id='notes_textarea' onChange={event => handleChange(event)} defaultValue={customerChosen.notes} ></textarea>
+            <button onClick={e => handleDeletion(e)}>Delete this Customer</button>
+        </>
+    )
+}
+
+export default Show;
+
+    // const whichThingsToRender = () => {
+    //     /*
+    //     Let's say our customer looks like this:
+    //     {company: "Doug's food emporium", contact: "Greg Jones", ... old_address: "123 West Road" ...}
+    //     We can just run through the thing and make it make divs that look like this:
+    //     <div>
+    //         <h2>Company</h2>
+    //         <h3>__company_name_from_redux__</h3>
+    //     </div>
+    //     etc. This function does that
+    //     */
+    //     for (const key of Object.keys(customerChosen)){
+            
+    //     }
+    // }
+
+            /* <div id="company_div">
                 <h2>Company</h2>
-                <h3></h3>
+                <h3>__company_name_from_redux__</h3>
             </div>
-            <form id="customer_form" onSubmit={handleSubmit}>
-                <label>
-                    Company: 
-                    <input type="text" defaultValue={customer.company} id="company" onChange={e => handleChange(e)}></input>
-                </label>
-                <label>
-                    Contact: 
-                    <input type="text" defaultValue={customer.contact} id="contact" onChange={e => handleChange(e)}></input>
-                </label>
+            <div id="category_div">
+                <h2>Category</h2>
+                <h3>__category_from_redux__</h3>
+            </div>
+            <div id="contact_name_div">
+                <h2>Contact Name</h2>
+                <h3>__contact_name_from_redux__</h3>
+            </div>
+            <div id="title_div">
+                <h2>Title</h2>
+                <h3>__title_from_redux__</h3>
+            </div>
+            <div id="contact_name_div">
+                <h2>Contact Name</h2>
+                <h3>__contact_name_from_redux__</h3>
+            </div>
+            <div id="title_div">
+                <h2>Title</h2>
+                <h3>__title_from_redux__</h3>
+            </div> */
+
+/*                 
                 <label>
                     Workers: 
                     <div id="multi_select">
@@ -123,9 +171,4 @@ const Show = () => {
                     <input type="text" defaultValue={customer.consultant_email} id="consultant_email" onChange={e => handleChange(e)}></input>
                 </label>
             <button type="submit" onClick={e => handleSubmit(e)} id="submit_new_customer">Submit</button>
-            </form>
-        </>
-    )
-}
-
-export default Show;
+            </form> */

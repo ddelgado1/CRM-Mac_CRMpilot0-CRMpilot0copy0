@@ -7,18 +7,8 @@ export const index = (req, res, next) =>{
     .then(([rows, fieldData]) => {
         res.json(rows);
     })
-    .catch(err => res.json({message: "We made an oopsie"}));
+    .catch(err => res.json({message: "We couldn't find any customers"}));
 };
-
-export const show = (req, res, next) => {
-    //Uses the method findByID from the contact.js models file. This is the show method where we only get one element
-    Contact.findByID(req.body.id)
-    .then(([contact]) => {
-        res.json(contact);
-    } )
-    .catch(err => res.json({message: "We made an oopsie"}));
-}
-
 
 export const create = (req, res, next) => {
     // Here we create new customers (or contacts, I can never seem to agree on what they're called, but nor can Richard so it's kind of a moot point...)
@@ -31,7 +21,6 @@ export const create = (req, res, next) => {
     Contact.companyValidator(contact.company)
     .then(([contact]) => {
         if (contact){
-            console.log("Company already has a contact")
             res.json({message: "company already has a contact"});
         }
         else{
@@ -42,7 +31,7 @@ export const create = (req, res, next) => {
             .catch(err => res.json({message: "Something went wrong when you tried to save your contact"}))
         }
     })
-    .catch(err => res.json({error: "Something went wrong on our end, very sorry"}) )
+    .catch(err => res.json({message: "Something went wrong on our end, very sorry"}) )
     }
     
 export const update = (req, res, next) => {
@@ -51,7 +40,7 @@ export const update = (req, res, next) => {
     .then(([contact]) => {
         contact.updateNotes(req.body.notes)
         .then(res.json({message: "Notes updated successfully"}))
-        .catch(err => res.json({message: "We made an oopsie"}))
+        .catch(err => res.json({message: "Your notes couldn't be updated"}))
     })
 }
 
@@ -65,3 +54,13 @@ export const destroy = (req, res, next) => {
     })
     .catch(err => res.json({message: "Couldn't find the customer for some reason"}));
 }
+
+
+// export const show = (req, res, next) => {
+//     //Uses the method findByID from the contact.js models file. This is the show method where we only get one element
+//     Contact.findByID(req.body.id)
+//     .then(([contact]) => {
+//         res.json(contact);
+//     } )
+//     .catch(err => res.json({message: "We made an oopsie"}));
+// }

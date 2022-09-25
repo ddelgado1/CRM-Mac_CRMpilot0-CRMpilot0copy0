@@ -37,10 +37,12 @@ const New = () => {
     const workers = useSelector((state) => state.workers)
 
     useEffect(() => {
+        //We get the workers information on startup (acts like componentDidMount)
         dispatch(getWorkers())
       }, [dispatch]);
 
     const handleSubmit = (e) => {
+        //Handles submitting the form
         dispatch(createContact(customer))
     }
 
@@ -99,6 +101,7 @@ const New = () => {
                 <label>
                     Category: 
                     <input type="text" defaultValue={customer.category} id="category" onChange={e => handleChange(e)}></input>
+                    {/* Category should be a dropdown as well (I don't have access to the options now since I'm on a plane) */}
                 </label>
                 <label>
                     Broker Company: 

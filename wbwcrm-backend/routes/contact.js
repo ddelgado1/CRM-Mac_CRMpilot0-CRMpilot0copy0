@@ -7,6 +7,8 @@ contactRouter.get('/', index);
 
 contactRouter.post('/', create);
 
+// contactRouter.post('/id', update); //Need to figure out how to do routes of individual ids
+
 // router.post('/add-product', (req, res, next) => {
 //     console.log(req.body.title);
 //     res.redirect('/');
