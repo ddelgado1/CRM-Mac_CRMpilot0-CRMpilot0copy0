@@ -23,7 +23,7 @@ export const destroy = (req, res, next) => {
     JoinTable.findByContactID(req.contact_id)
     .then((join_table_elements) => {
         for(const table of join_table_elements){
-            
+            .then(() => res.json({message: "Contact has been deleted successfully"}))
         }
     })
     .catch(err => res.json({message: "Couldn't find any join tables for some reason"}));
