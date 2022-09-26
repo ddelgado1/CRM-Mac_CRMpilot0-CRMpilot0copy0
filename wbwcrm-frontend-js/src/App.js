@@ -1,4 +1,30 @@
-const App = () => {
+import { Link, Outlet } from 'react-router-dom';
+import { getContacts } from './actions/contact.js';
+import { getWorkers } from './actions/worker';
+import { getWorkersAndContactsJoin } from './actions/jointable'
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+
+import './App.css';
+
+const App = (props) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getContacts())
+        dispatch(getWorkers())
+        dispatch(getWorkersAndContactsJoin())
+      }, [dispatch]);
+
+    return(
+        <div className='App'>
+            <header className='app_header'>
+                <h3><Link to="contacts">View All Contacts</Link></h3>
+                <h3><Link to="new_contact">Create a New Contact</Link></h3>
+            </header>
+            <Outlet />
+        </div>
+    )
 }
 export default App;
 

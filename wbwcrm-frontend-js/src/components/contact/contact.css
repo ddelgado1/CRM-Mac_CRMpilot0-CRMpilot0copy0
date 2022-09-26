@@ -39,3 +39,11 @@ label {
 #multi_select{
   max-width: 10em;
 }
+
+.show_h2_div{
+  margin-left: 100px;
+}
+
+#new_errors{
+  margin-left: 10px;
+}

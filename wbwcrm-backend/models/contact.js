@@ -1,14 +1,14 @@
 import db from '../util/database.js'; // The database pool we're getting the information/sending information to
 
 class Contact{
-    constructor(id, company, name, email, number, title, old_address, new_address, category, broker_name, broker_company,
+    constructor(id, company, contact_name, contact_email, number, contact_title, old_address, new_address, category, broker_name, broker_company,
          broker_number, broker_email, architect_name, architect_company, architect_number, architect_email, consultant_name, consultant_company, consultant_number, consultant_email, notes){
         this.id = id;
         this.company = company;
-        this.name = name;
-        this.email = email;
-        this.number = number;
-        this.title = title;
+        this.contact_name = contact_name;
+        this.contact_email = contact_email;
+        this.contact_phone_number = number;
+        this.contact_title = contact_title;
         this.old_address = old_address;
         this.new_address = new_address;
         this.category = category;
@@ -29,9 +29,9 @@ class Contact{
     }
     save(){
     // The purpose of this function is to save a new element to the database.
-    return db.execute(`INSERT INTO workers (company, name, email, number, title, old_address, new_address, category, broker_name, broker_company,
+    return db.execute(`INSERT INTO contacts (company, contact_name, contact_email, contact_phone_number, contact_title, old_address, new_address, category, broker_name, broker_company,
         broker_number, broker_email, architect_name, architect_company, architect_number, architect_email, consultant_name, consultant_company, consultant_number, consultant_email, notes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [this.company, this.name, this.email, this.number, this.title, this.old_address, this.new_address, this.category, this.broker_name, this.broker_company, this.broker_number, this.broker_email,
+        [this.company, this.contact_name, this.contact_email, this.contact_phone_number, this.contact_title, this.old_address, this.new_address, this.category, this.broker_name, this.broker_company, this.broker_number, this.broker_email,
         this.architect_name, this.architect_company, this.architect_number, this.architect_email, this.consultant_name, this.consultant_company, this.consultant_number, this.consultant_email, this.notes]);
     }
 
@@ -43,6 +43,10 @@ class Contact{
     deleteMe(){
         //Uses SQL to delete an individual customer element
         return db.execute('DELETE FROM contacts WHERE id = ?', [this.id]);
+    }
+
+    contactValidator(){
+        return this.company !== "" && this.contact_name !== "" && this.category !== "" 
     }
 
     static all(){

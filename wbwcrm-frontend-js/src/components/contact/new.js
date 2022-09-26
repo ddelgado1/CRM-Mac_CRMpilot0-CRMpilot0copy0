@@ -3,20 +3,21 @@ import { MultiSelect } from "react-multi-select-component";
 import { useSelector, useDispatch } from 'react-redux';
 import { getWorkers } from '../../actions/worker.js';
 import {createContact} from '../../actions/contact.js';
+import { useNavigate } from 'react-router-dom';
 
 import './contact.css';
 
-const New = () => {
+const New = (props) => {
     const [customer, setCustomer] = useState(
         {
          company: "",
-         contact: "",
+         contact_name: "",
          title: "",
          email: "",
          number: "",
          old_address: "",
          new_address: "",
-         category: "",
+         category: "EU",
          broker_company: "",
          broker_name: "",
          broker_number: "",
@@ -35,6 +36,8 @@ const New = () => {
 
     const dispatch = useDispatch();
     const workers = useSelector((state) => state.workers)
+    const contacts = useSelector((state) => state.contacts)
+    const navigate = useNavigate();
 
     useEffect(() => {
         //We get the workers information on startup (acts like componentDidMount)
@@ -43,7 +46,8 @@ const New = () => {
 
     const handleSubmit = (e) => {
         //Handles submitting the form
-        dispatch(createContact(customer))
+        e.preventDefault();
+        dispatch(createContact(customer, selected, navigate))
     }
 
     
@@ -63,13 +67,13 @@ const New = () => {
                 </label>
                 <label>
                     Contact: 
-                    <input type="text" defaultValue={customer.contact} id="contact" onChange={e => handleChange(e)}></input>
+                    <input type="text" defaultValue={customer.contact_name} id="contact_name" onChange={e => handleChange(e)}></input>
                 </label>
                 <label>
                     Workers: 
                     <div id="multi_select">
                     <MultiSelect 
-                        options={workers.workers}
+                        options={workers.select_tag_worker_list}
                         value={selected}
                         onChange={setSelected}
                         labelledBy="Select"
@@ -80,7 +84,7 @@ const New = () => {
                 </label>
                 <label>
                     Title: 
-                    <input type="text" defaultValue={customer.title} id="title" onChange={e => handleChange(e)}></input>
+                    <input type="text" id="title" onChange={e => handleChange(e)}></input>
                 </label>
                 <label>
                     Email: 
@@ -100,7 +104,13 @@ const New = () => {
                 </label>
                 <label>
                     Category: 
-                    <input type="text" defaultValue={customer.category} id="category" onChange={e => handleChange(e)}></input>
+                    <select id="category"onChange={e => handleChange(e)}>
+                        <option value="EU">EU</option>
+                        <option value="REB">REB</option>
+                        <option value="A&D">A&D</option>
+                        <option value="PMfirm">PMfirm</option>
+                        <option value="Other">Other</option>
+                    </select>
                     {/* Category should be a dropdown as well (I don't have access to the options now since I'm on a plane) */}
                 </label>
                 <label>
@@ -158,6 +168,7 @@ const New = () => {
                 </label>
             <button type="submit" onClick={e => handleSubmit(e)} id="submit_new_customer">Submit</button>
             </form>
+            <h2 id="new_errors">{contacts.errors}</h2>
         </>
     )
 }

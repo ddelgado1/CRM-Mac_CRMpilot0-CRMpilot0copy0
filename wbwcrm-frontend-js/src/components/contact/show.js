@@ -12,13 +12,39 @@ const Show = () => {
 
     const dispatch = useDispatch();
     const customerChosen = useSelector((state) => state.contacts.selected_customer) //This is the current customer we get from redux
-    
-    
+    const selected_workers = useSelector((state) => state.contacts.selected_customer_workers) //These are the workers themselves
+
     const handleChange = (event) => {
         dispatch(patchNotes({value: event.target.value, id: customerChosen.id}));
     
     }
-
+    
+    const renderMaker = () => {
+        //Determines what gets rendered
+        const divs = [];
+        for (const key of Object.keys(customerChosen)){
+            if (key !== "notes" && key !== "id" && customerChosen[key] !== ""){
+                divs.push(
+                    <div key={key} className='show_h2_div'>
+                        <h2>{key.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}</h2>
+                        <h3>{customerChosen[key]}</h3>
+                    </div>
+                )
+            }
+            if (key === "contact_title"){
+                divs.push(
+                <div key="workers" className='show_h2_div'>
+                    <h2>Workers</h2>
+                    {selected_workers.map(worker =>{
+                        return(<h3 key={worker.value}>{worker.label}</h3>)
+                    })}
+                </div>
+                )
+            }
+            
+        }
+        return divs;
+    }
     const handleDeletion = (event) => {
         /* Want an alert to pop up asking if they're sure they want to delete it. That alert has a button which deletes on click */
         //ALERT
@@ -28,10 +54,13 @@ const Show = () => {
 
     return(
         <>
-            {/* We should be able to render only the elements that we need to. Just need to figure out how to make a for loop work within this */}
-            <h2>Notes:</h2>
-            <textarea id='notes_textarea' onChange={event => handleChange(event)} defaultValue={customerChosen.notes} ></textarea>
-            <button onClick={e => handleDeletion(e)}>Delete this Customer</button>
+            {renderMaker().map(element => element)}
+            <div className='show_h2_div'>
+                <h2>Notes:</h2>
+                <textarea id='notes_textarea' onChange={event => handleChange(event)} defaultValue={customerChosen.notes.data} ></textarea><br/>
+                <button onClick={e => handleDeletion(e)}>Delete this Customer</button>
+            </div>
+            
         </>
     )
 }

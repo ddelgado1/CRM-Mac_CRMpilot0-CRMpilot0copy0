@@ -7,31 +7,39 @@ export const index = (req, res, next) =>{
     .then(([rows, fieldData]) => {
         res.json(rows);
     })
-    .catch(err => res.json({message: "We couldn't find any customers"}));
+    .catch(err => res.json({message: err}));
 };
 
 export const create = (req, res, next) => {
     // Here we create new customers (or contacts, I can never seem to agree on what they're called, but nor can Richard so it's kind of a moot point...)
-    //Need to figure out how to properly validate if company already exists
     const contact = new Contact(
-        null, req.body.company, req.body.name, req.body.email, req.body.number, req.body.title, req.body.old_address, req.body.new_address, req.body.category,  
-        req.body.broker_name, req.body.broker_company, req.body.broker_number, req.body.broker_email, req.body.architect_name, req.body.architect_company, req.body.architect_number, req.body.architect_email,  
-        req.body.consultant_name, req.body.consultant_company, req.body.consultant_number, req.body.consultant_email, req.body.notes
+        null, req.body.contact.company, req.body.contact.contact_name, req.body.contact.email, req.body.contact.number, req.body.contact.title, req.body.contact.old_address, req.body.contact.new_address, req.body.contact.category,  
+        req.body.contact.broker_name, req.body.contact.broker_company, req.body.contact.broker_number, req.body.contact.broker_email, req.body.contact.architect_name, req.body.contact.architect_company, req.body.contact.architect_number, req.body.contact.architect_email,  
+        req.body.contact.consultant_name, req.body.contact.consultant_company, req.body.contact.consultant_number, req.body.contact.consultant_email, ""
         )
     Contact.companyValidator(contact.company)
-    .then(([contact]) => {
-        if (contact){
+    .then(([found_contact_element]) => {
+        if (found_contact_element.length !== 0){
             res.json({message: "company already has a contact"});
         }
+        
         else{
+            (contact.contactValidator() && req.body.workers.length !== 0) ? 
             contact.save()
-            .then(() => {
-                res.json({message: "Contact created successfully"})
+            .then((result) => {
+                Contact.findByID(result[0].insertId)
+                .then(([new_contact]) =>{
+                    res.json({contact: new_contact, workers: req.body.workers})
+                })
+                .catch(err => res.json(err))
+                
             })
-            .catch(err => res.json({message: "Something went wrong when you tried to save your contact"}))
+            .catch(err => res.json({message: err}))
+            :
+            res.json({message: "Must have company name, contact name, workers, and category filled"})
         }
     })
-    .catch(err => res.json({message: "Something went wrong on our end, very sorry"}) )
+    .catch(err => res.json({message: err}) )
     }
     
 export const update = (req, res, next) => {
@@ -54,13 +62,3 @@ export const destroy = (req, res, next) => {
     })
     .catch(err => res.json({message: "Couldn't find the customer for some reason"}));
 }
-
-
-// export const show = (req, res, next) => {
-//     //Uses the method findByID from the contact.js models file. This is the show method where we only get one element
-//     Contact.findByID(req.body.id)
-//     .then(([contact]) => {
-//         res.json(contact);
-//     } )
-//     .catch(err => res.json({message: "We made an oopsie"}));
-// }

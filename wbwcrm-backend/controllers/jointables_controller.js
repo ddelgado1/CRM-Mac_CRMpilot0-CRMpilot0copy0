@@ -11,23 +11,37 @@ export const index = (req, res, next) =>{
 };
 
 export const create = (req, res, next) => {
-    // Here we create new join tables between workers and customers
-    const newTable = new JoinTable(null, req.body.worker_id, req.body.contact_id);
-    newTable.save()
-    .then(() => {res.json({message: "new join table created successfully"})})
-    .catch(err => res.json({message: "Something went wrong with the join table creation"}))
-}
 
-export const destroy = (req, res, next) => {
-    // Since there are multiple workers per customer, we will have to do multiple destructions
-    JoinTable.findByContactID(req.contact_id)
-    .then((join_table_elements) => {
-        for(const table of join_table_elements){
-            .then(() => res.json({message: "Contact has been deleted successfully"}))
-        }
+    for (const worker of req.body.workers){
+        const newJoinTable = new JoinTable(null, req.body.contact_id, worker.value) //We use value here since it's in the form that multi-select gave us
+        newJoinTable.save()
+        .then(() => {})
+        .catch(err => res.json({message: err}))
+    }
+    JoinTable.all()
+    .then(([rows, fieldData]) => {
+        res.json({contact_id: req.body.contact_id, tables: rows})
     })
-    .catch(err => res.json({message: "Couldn't find any join tables for some reason"}));
+    .catch(err => res.json({message: err}));
+    
 }
+    
+
+// export const destroy = (req, res, next) => {
+//     // Since there are multiple workers per customer, we will have to do multiple destructions
+//     JoinTable.findByContactID(req.contact_id)
+//     .then((join_table_elements) => {
+//         for(const table of join_table_elements){
+//             if (table.contact_id === req.contact_id){
+//                 table.deleteMe()
+//                 .then(() => res.json({message: "Contact has been deleted successfully"}))
+//                 .catch(err => res.json({message: "Couldn't delete join table"}))
+//             }
+            
+//         }
+//     })
+//     .catch(err => res.json({message: "Couldn't find any join tables for some reason"}));
+// }
 
 
 // export const show = (req, res, next) => {

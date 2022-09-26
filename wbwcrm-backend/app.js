@@ -23,6 +23,7 @@
 import express from 'express';
 import workerRouter from './routes/worker.js';
 import contactRouter from './routes/contact.js';
+import workerContactRouter from './routes/jointable.js';
 import cors from 'cors';
 
 // import db from './util/database.js'
@@ -33,6 +34,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 app.use('/workers', workerRouter);
 app.use('/contacts', contactRouter);
+app.use('/workerContacts', workerContactRouter);
 // db.execute('SELECT * FROM workers')
 // .then(result => {
 //     console.log(result[0][0].name);

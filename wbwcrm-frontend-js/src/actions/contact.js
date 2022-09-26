@@ -1,24 +1,46 @@
 import axios from 'axios';
+import { generatePath } from 'react-router-dom';
 
 export const getContacts = () => dispatch => {
   axios.get("http://localhost:3001/contacts")
-  .then(response => dispatch({ type: 'GET_ALL_CONTACTS', payload: response.data}))
-}
+  .then(response => 
+    {
+      if (response.data.message){
+        dispatch({type: 'CONTACT_ERROR', payload: response.data.message})
+      }
+      else{
+        dispatch({ type: 'GET_ALL_CONTACTS', payload: response.data})
+      }
+    })
+} 
 
-export const createContact = (contact_information) => dispatch => {
-  axios.post("http://localhost:3001/contacts", contact_information)
+export const createContact = (contact_information, selected_workers, navigate) => dispatch => {
+  axios.post("http://localhost:3001/contacts", {contact: contact_information, workers: selected_workers})
   .then(response => { 
-    if (response.data.errors){
-      dispatch({type: 'CONTACT_CREATION_ERROR', payload: response.data.errors})
+    if (response.data.message){
+      dispatch({type: 'CONTACT_ERROR', payload: response.data.message})
     }
     else{
-      dispatch({ type: 'CREATE_NEW_CONTACT', payload: response.data})
+      dispatch({ type: 'CREATE_NEW_CONTACT', payload: {contact: response.data.contact[0], workers: response.data.workers}})
+      axios.post("http://localhost:3001/workerContacts", {contact_id: response.data.contact[0].id, workers: response.data.workers})
+      .then(response => { 
+        if (response.data.message){
+          dispatch({type: 'CONTACT_ERROR', payload: response.data.message})
+        }
+        else{
+          dispatch({ type: 'CREATE_NEW_JOIN_TABLES', payload: {contact_id: response.data.contact_id, tables: response.data.tables} })
+          const path = generatePath("/contact/:id", {
+            id: response.data.contact_id
+          });
+          navigate(path);
+        }
+      })
     }
   })
 }
 
-export const lookAtSpecificContact = (contact_information) => dispatch => {
-  dispatch({type: 'CUSTOMER_SHOW_PAGE', payload: contact_information});
+export const lookAtSpecificContact = (contact_information, workers) => dispatch => {
+  dispatch({type: 'CUSTOMER_SHOW_PAGE', payload: {contact: contact_information, workers: workers}});
 }
 
 export const patchNotes = (note_data) => dispatch => {
