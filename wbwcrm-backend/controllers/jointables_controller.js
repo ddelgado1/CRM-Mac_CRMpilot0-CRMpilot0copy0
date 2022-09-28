@@ -11,19 +11,12 @@ export const index = (req, res, next) =>{
 };
 
 export const create = (req, res, next) => {
-
+    const newJoinsPromiseArray = [];
     for (const worker of req.body.workers){
-        const newJoinTable = new JoinTable(null, req.body.contact_id, worker.value) //We use value here since it's in the form that multi-select gave us
-        newJoinTable.save()
-        .then(() => {})
-        .catch(err => res.json({message: err}))
+        const newJoinElement = new JoinTable(null, req.body.contact_id, worker.value) //We use value here since it's in the form that multi-select gave us
+        newJoinsPromiseArray.push(newJoinElement.save().then(result => JoinTable.findByID(result[0].insertId)))
     }
-    JoinTable.all()
-    .then(([rows, fieldData]) => {
-        res.json({contact_id: req.body.contact_id, tables: rows})
-    })
-    .catch(err => res.json({message: err}));
-    
+    Promise.all(newJoinsPromiseArray).then((values) => res.json(values.map(val => val[0]).flat()))
 }
     
 

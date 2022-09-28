@@ -8,20 +8,21 @@ Need to work on making the errors in the controllers more robust (like actually 
     - Admin rights
     - Need to make route names
     - Need to beef up our validators so that people can't change things with inspect element
+    - Need to make error stuff better
 
 - Contacts
     - Index
         - Done!
     - New
-        - Done!
+        - Need to get rid of errors on page change (only did it for contacts, need to also do it for the other two)
     - Show 
         - Need to make sure that you can only change notes if you have rights (are an admin or are working on it)
-        - Need to fix the contactreducer so that the notes can change
-        - Need to get the for loop working within the return statement (don't include notes since it's separate)
+        - Need to setup notes saving/displaying (update)
+            - Instead of having backend return an updated notes, we could just update notes on our own on the frontend in redux so that it's essentially the same thing
+        - Need to timestamp notes
+            - Here's what I'm thinking: Instead of doing the save on every change, we just have a submit button so that we can properly time stamp things, but we also save what they have in session so that it doesn't get lost if page reloads or whatever (maybe a cookie
+            I don't know the difference yet)
         - Destroy needs to work as well
-
-    - Actions
-        - Need to make it so that we only push location on successful dispatch
 
 - Workers
     - Need to work on all of it (based on how long contacts took, it shouldn't be too long)
@@ -29,10 +30,5 @@ Need to work on making the errors in the controllers more robust (like actually 
 Back end:
 
 - Contacts
-    - Create
-        - Need to make sure notes gets initiated on creation
-        - Need to actually get it to work (wasn't uploading to DB for some reason)
-        - Need to also make sure join table gets updated so that we can utilize that information (kinda seperate since we 
-        wanna make that logic work on the join table itself so we should make it its own controller maybe)
     - Update
-        - Same as create with it actually uploading
+        - Need to ensure route is correct (what with :id and whatever)

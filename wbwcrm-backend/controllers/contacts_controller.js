@@ -43,7 +43,7 @@ export const create = (req, res, next) => {
     }
     
 export const update = (req, res, next) => {
-    // Rather than make a traditional update method, we'd just have the changes to the notes be done on the client side via axios requests in which case we would catch those here and then update it
+    // In here, we update our notes by concatenating the old notes with the new ones along with a timestamp
     Contact.findByID(req.body.id)
     .then(([contact]) => {
         contact.updateNotes(req.body.notes)

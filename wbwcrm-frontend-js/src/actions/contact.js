@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { generatePath } from 'react-router-dom';
 
 export const getContacts = () => dispatch => {
+  //Does exactly what it says it does
   axios.get("http://localhost:3001/contacts")
   .then(response => 
     {
@@ -14,7 +14,8 @@ export const getContacts = () => dispatch => {
     })
 } 
 
-export const createContact = (contact_information, selected_workers, navigate) => dispatch => {
+export const createContact = (contact_information, selected_workers) => dispatch => {
+  //Does exactly what it says it does
   axios.post("http://localhost:3001/contacts", {contact: contact_information, workers: selected_workers})
   .then(response => { 
     if (response.data.message){
@@ -28,11 +29,8 @@ export const createContact = (contact_information, selected_workers, navigate) =
           dispatch({type: 'CONTACT_ERROR', payload: response.data.message})
         }
         else{
-          dispatch({ type: 'CREATE_NEW_JOIN_TABLES', payload: {contact_id: response.data.contact_id, tables: response.data.tables} })
-          const path = generatePath("/contact/:id", {
-            id: response.data.contact_id
-          });
-          navigate(path);
+          dispatch({type: 'DELETE_CONTACT_ERROR'})
+          dispatch({ type: 'CREATE_NEW_JOIN_TABLES', payload: response.data })
         }
       })
     }
@@ -40,6 +38,7 @@ export const createContact = (contact_information, selected_workers, navigate) =
 }
 
 export const lookAtSpecificContact = (contact_information, workers) => dispatch => {
+  // renders show page
   dispatch({type: 'CUSTOMER_SHOW_PAGE', payload: {contact: contact_information, workers: workers}});
 }
 
@@ -53,4 +52,9 @@ export const destroyContact = (id) => dispatch => {
   //Not sure if delete is the right thing. Gotta check with axios. Also gotta check what correct route for destroy is
   axios.delete(`__Haven't_decided_link_yet/contacts/${id}`)
       .then(resp => dispatch({type: 'CONTACT_DESTROYED', payload: resp.data}))
+}
+
+export const deleteContactErrors = () => dispatch => {
+  //Does exactly what it says it does
+  dispatch({type: "DELETE_CONTACT_ERROR"})
 }

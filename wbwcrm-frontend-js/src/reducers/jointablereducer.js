@@ -12,7 +12,7 @@ export default function workerContactReducer(state = initialState, action){
         case 'CREATE_NEW_JOIN_TABLES':
             return{
                 ...state,
-                tables: action.payload.tables
+                tables: state.tables.concat(action.payload)
             }
         default:
             return{

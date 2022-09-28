@@ -36,8 +36,11 @@ class Contact{
     }
 
     updateNotes(new_notes_text){
-        //Uses SQL to update the notes text saved to this specific customer
-        return db.execute('UPDATE contacts SET notes = ? WHERE id = ?', [new_notes_text, this.id])
+        /* 
+            Uses SQL to concatenate the existing notes with the new notes, breaking up the lines by a special set of characters so that we know where to break the line. We just need to find a random string
+            that we would hope our users would never type. Not sure how to do that without risking having shit break but if we make it complex enough, we can make it so that the users never type it 
+        */
+        return db.execute('UPDATE contacts SET notes = CONCAT_WS(?, ?, ?) WHERE id = ?', [" Yo|vCb&ofEy:/q= ", this.notes, new_notes_text, this.id])
     }
 
     deleteMe(){

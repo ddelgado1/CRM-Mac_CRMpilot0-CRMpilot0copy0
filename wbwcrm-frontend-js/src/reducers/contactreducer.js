@@ -34,6 +34,11 @@ export default function contactReducer(state = initialState, action){
                 ...state,
                 errors: action.payload
             }
+        case 'DELETE_CONTACT_ERROR':
+            return{
+                ...state,
+                errors: ""
+            }
         case 'CREATE_NEW_CONTACT':
             return{
                 ...state,

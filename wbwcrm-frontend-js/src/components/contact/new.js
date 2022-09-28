@@ -1,11 +1,12 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import { MultiSelect } from "react-multi-select-component";
 import { useSelector, useDispatch } from 'react-redux';
 import { getWorkers } from '../../actions/worker.js';
 import {createContact} from '../../actions/contact.js';
 import { useNavigate } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 
-import './contact.css';
+import './contact.scss';
 
 const New = (props) => {
     const [customer, setCustomer] = useState(
@@ -35,19 +36,41 @@ const New = (props) => {
     const [selected, setSelected] = useState([]); //This determines what has and hasn't been selected yet with workers
 
     const dispatch = useDispatch();
-    const workers = useSelector((state) => state.workers)
-    const contacts = useSelector((state) => state.contacts)
+    const workers = useSelector((state) => state.workers);
+    const contacts = useSelector((state) => state.contacts);
+    const workerContacts = useSelector((state) => state.workerContacts);
     const navigate = useNavigate();
+
+    const currentContactRef = useRef(contacts); //This is to give the navigation the id in the useEffect without it triggereing it again
+    const hasBeenRenderedRef = useRef(false); //Used to determine if we've rendered it yet or not so that we don't have to run second useEffect at first render
 
     useEffect(() => {
         //We get the workers information on startup (acts like componentDidMount)
         dispatch(getWorkers())
       }, [dispatch]);
 
+    useEffect(() => {
+        //This final useEffect is here to tell us when contacts changes so that we can update our currentContactRef
+        currentContactRef.current = contacts;
+    }, [contacts])
+
+    useEffect(() => {
+    //This useEffect is for determining if we've had our workersTables changed so that we can render our show and not worry about the index page having a lack of workers in it
+    if (hasBeenRenderedRef.current === true){
+        if (currentContactRef.current.errors === ""){
+            const path = generatePath("/contact/:id", {id: currentContactRef.current.selected_customer.id});
+            navigate(path);
+        }
+    }
+    }, [workerContacts, navigate]) 
+    
+    
+
     const handleSubmit = (e) => {
         //Handles submitting the form
         e.preventDefault();
-        dispatch(createContact(customer, selected, navigate))
+        dispatch(createContact(customer, selected));
+        hasBeenRenderedRef.current = true;
     }
 
     
