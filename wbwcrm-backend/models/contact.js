@@ -35,19 +35,6 @@ class Contact{
         this.architect_name, this.architect_company, this.architect_number, this.architect_email, this.consultant_name, this.consultant_company, this.consultant_number, this.consultant_email, this.notes]);
     }
 
-    updateNotes(new_notes_text){
-        /* 
-            Uses SQL to concatenate the existing notes with the new notes, breaking up the lines by a special set of characters so that we know where to break the line. We just need to find a random string
-            that we would hope our users would never type. Not sure how to do that without risking having shit break but if we make it complex enough, we can make it so that the users never type it 
-        */
-        return db.execute('UPDATE contacts SET notes = CONCAT_WS(?, ?, ?) WHERE id = ?', [" Yo|vCb&ofEy:/q= ", this.notes, new_notes_text, this.id])
-    }
-
-    deleteMe(){
-        //Uses SQL to delete an individual customer element
-        return db.execute('DELETE FROM contacts WHERE id = ?', [this.id]);
-    }
-
     contactValidator(){
         return this.company !== "" && this.contact_name !== "" && this.category !== "" 
     }
@@ -65,6 +52,16 @@ class Contact{
     static companyValidator(element_company){
         // Determines if company name is unique as to not have overlaps  
         return db.execute('SELECT * FROM contacts WHERE contacts.company = ?', [element_company]);
+    }
+
+    static updateNotes(new_notes_text, new_notes_id, old_notes){
+        // Uses SQL to concatenate the existing notes with the new notes
+        return db.execute('UPDATE contacts SET notes = CONCAT(?, ?) WHERE id = ?', [old_notes, new_notes_text, new_notes_id]);
+    }
+
+    static deleteMe(customer_id){
+        //Uses SQL to delete an individual customer element
+        return db.execute('DELETE FROM contacts WHERE id = ?', [customer_id]);
     }
 
     

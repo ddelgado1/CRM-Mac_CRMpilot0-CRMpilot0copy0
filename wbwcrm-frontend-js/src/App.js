@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom';
-import { getContacts, deleteContactErrors } from './actions/contact.js';
+import { getContacts, deleteContactErrorsAndRevertSearchedCustomers } from './actions/contact.js';
 import { getWorkers } from './actions/worker';
 import { getWorkersAndContactsJoin } from './actions/jointable'
 import { useDispatch } from 'react-redux';
@@ -18,13 +18,15 @@ const App = (props) => {
 
     const handleClick = (e) => {
         //To delete errors on page change
-        dispatch(deleteContactErrors());
+        dispatch(deleteContactErrorsAndRevertSearchedCustomers());
+        dispatch(getContacts())
     }
     return(
         <div className='App'>
             <header className='app_header'>
-                <h3><Link to="contacts" onClick={e => handleClick(e)}>View All Contacts</Link></h3>
-                <h3><Link to="new_contact">Create a New Contact</Link></h3>
+                <h3><Link to="contacts" onClick={e => handleClick(e)}>View All Customers</Link></h3>
+                <h3><Link to="new_contact" onClick={e => handleClick(e)}>Create a New Customer</Link></h3>
+                <h3><Link to="search" onClick={e => handleClick(e)}>Search Customers</Link></h3>
             </header>
             <Outlet />
         </div>

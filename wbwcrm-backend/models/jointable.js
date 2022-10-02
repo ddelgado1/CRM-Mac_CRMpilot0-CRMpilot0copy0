@@ -12,11 +12,6 @@ class JoinTable{
         return db.execute(`INSERT INTO workercontacts (contact_id, worker_id) VALUES(?, ?)`, [this.contact_id, this.worker_id]);
     }
 
-    deleteMe(){
-        //Uses SQL to delete an individual customer element
-        return db.execute('DELETE FROM workercontacts WHERE id = ?', [this.id]);
-    }
-
     static all(){
         /* Will give us all of the elements within the database */
         return db.execute('SELECT * FROM workercontacts');
@@ -25,6 +20,11 @@ class JoinTable{
     static findByID(element_id){
         // Will give us a specific element based on the id 
         return db.execute('SELECT * FROM workerContacts WHERE workerContacts.id = ?', [element_id]);
+    }
+
+    static deleteMe(customer_id){
+        //Uses SQL to delete an individual customer element
+        return db.execute('DELETE FROM workercontacts WHERE workerContacts.contact_id = ?', [customer_id]);
     }
 
     

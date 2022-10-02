@@ -7,7 +7,7 @@ export const index = (req, res, next) =>{
     .then(([rows, fieldData]) => {
         res.json(rows);
     })
-    .catch(err => res.json({message: "We couldn't find any groupings of workers and customers"}));
+    .catch(err => res.error(err));
 };
 
 export const create = (req, res, next) => {
@@ -18,30 +18,10 @@ export const create = (req, res, next) => {
     }
     Promise.all(newJoinsPromiseArray).then((values) => res.json(values.map(val => val[0]).flat()))
 }
-    
 
-// export const destroy = (req, res, next) => {
-//     // Since there are multiple workers per customer, we will have to do multiple destructions
-//     JoinTable.findByContactID(req.contact_id)
-//     .then((join_table_elements) => {
-//         for(const table of join_table_elements){
-//             if (table.contact_id === req.contact_id){
-//                 table.deleteMe()
-//                 .then(() => res.json({message: "Contact has been deleted successfully"}))
-//                 .catch(err => res.json({message: "Couldn't delete join table"}))
-//             }
-            
-//         }
-//     })
-//     .catch(err => res.json({message: "Couldn't find any join tables for some reason"}));
-// }
-
-
-// export const show = (req, res, next) => {
-//     //Uses the method findByID from the contact.js models file. This is the show method where we only get one element
-//     Contact.findByID(req.body.id)
-//     .then(([contact]) => {
-//         res.json(contact);
-//     } )
-//     .catch(err => res.json({message: "We made an oopsie"}));
-// }
+export const destroy = (req, res) => {
+    // Here is when we want to remove an existing contact
+    JoinTable.deleteMe(req.body.id)
+    .then(() => res.json("Join tables deleted"))
+    .catch((err) => res.error(err))
+}

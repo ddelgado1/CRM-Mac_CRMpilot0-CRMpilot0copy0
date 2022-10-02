@@ -1,20 +1,21 @@
 import './contact.scss'
 import { lookAtSpecificContact } from '../../actions/contact';
-import { useMemo, lazy, Suspense } from 'react';
+import { useMemo, lazy, Suspense, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, generatePath } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Table = lazy(() => import('./contact_index_table.js'));
 
 
-const Index = (props) => {
+const Index = () => {
     const dispatch = useDispatch();
-    
-    const contacts = useSelector((state) => state.contacts)
-    const workers = useSelector((state) => state.workers)
-    const workerContacts = useSelector((state) => state.workerContacts)
     const navigate = useNavigate();
 
+    const contacts = useSelector((state) => state.contacts) // Here are all of the contacts
+    const customersIfNoSearchedCustomersElseSearchedCustomersRef = useRef([]) //The reason we're including this is that if there are searched customers, we want to use them instead of all customers
+    const workers = useSelector((state) => state.workers)
+    const workerContacts = useSelector((state) => state.workerContacts)
+    
 
     const columns = useMemo( //These are the columns for the table we're using
         () => [
@@ -59,7 +60,13 @@ const Index = (props) => {
     
     const dataMaker = () => {
         //This is how we make the array work in a way that 
-        return (contacts.contacts.map((individual_customer) => {
+        if (contacts.searched_customers.length !== 0){
+            customersIfNoSearchedCustomersElseSearchedCustomersRef.current = contacts.searched_customers
+        }
+        else{
+            customersIfNoSearchedCustomersElseSearchedCustomersRef.current = contacts.contacts
+        }
+        return (customersIfNoSearchedCustomersElseSearchedCustomersRef.current.map((individual_customer) => {
             const workers_array = workerListMaker(individual_customer.id).map((worker, index, workers) => {
                 if (index + 1 === workers.length){
                     return worker;
@@ -82,15 +89,12 @@ const Index = (props) => {
     
     const handleClick = (e, chosen_contact) => {
         //This should mean they clicked on a choice and now they're supposed to be routed to the show page of that specific customer
-        const path = generatePath("/contact/:id", {
-            id: chosen_contact.id
-          });
         dispatch(lookAtSpecificContact(chosen_contact, workerListMaker(chosen_contact.id)))
-        navigate(path)
+        navigate('/contact')
         /* Route to page once redux saves the information */
     }
 
-    if (workerContacts.tables.length === 0){
+    if (workerContacts.tables.length === 0 || contacts.contacts.length === 0 || workers.workers.length === 0 || workerContacts.tables.length === 0){
         return <h1>Loading...</h1>
     }
     else{
@@ -106,41 +110,3 @@ const Index = (props) => {
 
 
 export default Index;
-
-
-/* 
-<table>
-                    <thead>
-                        <tr>
-                            <th>Company</th>
-                            <th>Contact</th>
-                            <th>Category</th>
-                            <th>WBW Worker</th>
-                            <th>See Customer</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {contacts.contacts.length === 0 ? null : 
-                        contacts.contacts.map(element => {
-                        return (
-                            <tr key={element.company}>
-                                <td>{element.company}</td>
-                                <td>{element.contact_name}</td>
-                                <td>{element.category}</td>
-                                <td>{workerListMaker(element.id).map((worker, index, workers)  => {
-                                    if (index + 1 === workers.length){
-                                        return worker;
-                                    }
-                                    else{
-                                        return worker + ", ";
-                                    }
-                                }
-                                 )}</td>
-                                <td><button onClick={e => handleClick(e, element)}>Click To see</button></td>
-                            </tr>
-                        )
-                        })}  
-                    </tbody>
-                    
-                </table>
-*/

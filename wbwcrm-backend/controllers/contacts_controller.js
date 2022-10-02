@@ -1,16 +1,16 @@
 
 import Contact from '../models/contact.js';
 
-export const index = (req, res, next) =>{
+export const index = (req, res) =>{
     // The index method for contacts that gives us all of them
     Contact.all()
     .then(([rows, fieldData]) => {
         res.json(rows);
     })
-    .catch(err => res.json({message: err}));
+    .catch(err => res.error(err));
 };
 
-export const create = (req, res, next) => {
+export const create = (req, res) => {
     // Here we create new customers (or contacts, I can never seem to agree on what they're called, but nor can Richard so it's kind of a moot point...)
     const contact = new Contact(
         null, req.body.contact.company, req.body.contact.contact_name, req.body.contact.email, req.body.contact.number, req.body.contact.title, req.body.contact.old_address, req.body.contact.new_address, req.body.contact.category,  
@@ -31,34 +31,32 @@ export const create = (req, res, next) => {
                 .then(([new_contact]) =>{
                     res.json({contact: new_contact, workers: req.body.workers})
                 })
-                .catch(err => res.json(err))
+                .catch(err => res.error(err))
                 
             })
-            .catch(err => res.json({message: err}))
+            .catch(err => res.error(err))
             :
             res.json({message: "Must have company name, contact name, workers, and category filled"})
         }
     })
-    .catch(err => res.json({message: err}) )
+    .catch(err => res.error(err) )
     }
     
-export const update = (req, res, next) => {
+export const update = async (req, res) => {
     // In here, we update our notes by concatenating the old notes with the new ones along with a timestamp
-    Contact.findByID(req.body.id)
-    .then(([contact]) => {
-        contact.updateNotes(req.body.notes)
-        .then(res.json({message: "Notes updated successfully"}))
-        .catch(err => res.json({message: "Your notes couldn't be updated"}))
-    })
+    try{
+        const [found_contact] = await Contact.findByID(req.body.id)
+        const updated_contact = await Contact.updateNotes(req.body.value, req.body.id, found_contact[0].notes)
+        res.json(updated_contact[0])
+    }
+    catch (err){
+        res.error(err)
+    }
 }
 
-export const destroy = (req, res, next) => {
+export const destroy = (req, res) => {
     // Here is when we want to remove an existing contact
-    Contact.findByID(req.body.id)
-    .then(([contact]) => {
-        contact.deleteMe()
-        .then(() => res.json({message: "Contact has been deleted successfully"}))
-        .catch(err => res.json({message: "Couldn't delete for some reason"}));
-    })
-    .catch(err => res.json({message: "Couldn't find the customer for some reason"}));
+    Contact.deleteMe(req.body.id)
+    .then(() => res.json("Contact deleted"))
+    .catch((err) => res.error(err))
 }

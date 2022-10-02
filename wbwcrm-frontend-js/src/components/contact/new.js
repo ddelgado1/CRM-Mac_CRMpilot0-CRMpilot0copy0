@@ -1,14 +1,12 @@
 import {useState, useEffect, useRef} from 'react';
 import { MultiSelect } from "react-multi-select-component";
 import { useSelector, useDispatch } from 'react-redux';
-import { getWorkers } from '../../actions/worker.js';
 import {createContact} from '../../actions/contact.js';
 import { useNavigate } from 'react-router-dom';
-import { generatePath } from 'react-router-dom';
 
 import './contact.scss';
 
-const New = (props) => {
+const New = () => {
     const [customer, setCustomer] = useState(
         {
          company: "",
@@ -41,13 +39,8 @@ const New = (props) => {
     const workerContacts = useSelector((state) => state.workerContacts);
     const navigate = useNavigate();
 
-    const currentContactRef = useRef(contacts); //This is to give the navigation the id in the useEffect without it triggereing it again
+    const currentContactRef = useRef(contacts); //This is to determine if there are errors in the current customer without it triggering the useEffect when contacts changes
     const hasBeenRenderedRef = useRef(false); //Used to determine if we've rendered it yet or not so that we don't have to run second useEffect at first render
-
-    useEffect(() => {
-        //We get the workers information on startup (acts like componentDidMount)
-        dispatch(getWorkers())
-      }, [dispatch]);
 
     useEffect(() => {
         //This final useEffect is here to tell us when contacts changes so that we can update our currentContactRef
@@ -58,8 +51,7 @@ const New = (props) => {
     //This useEffect is for determining if we've had our workersTables changed so that we can render our show and not worry about the index page having a lack of workers in it
     if (hasBeenRenderedRef.current === true){
         if (currentContactRef.current.errors === ""){
-            const path = generatePath("/contact/:id", {id: currentContactRef.current.selected_customer.id});
-            navigate(path);
+            navigate("/contact");
         }
     }
     }, [workerContacts, navigate]) 
@@ -73,7 +65,6 @@ const New = (props) => {
         hasBeenRenderedRef.current = true;
     }
 
-    
 
     const handleChange = (e) => {
         const newKey = e.target.id;
@@ -134,7 +125,6 @@ const New = (props) => {
                         <option value="PMfirm">PMfirm</option>
                         <option value="Other">Other</option>
                     </select>
-                    {/* Category should be a dropdown as well (I don't have access to the options now since I'm on a plane) */}
                 </label>
                 <label>
                     Broker Company: 

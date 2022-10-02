@@ -13,7 +13,7 @@ const App = lazy(() => import('./App'));
 const Index = lazy(() => import('./components/contact/contact_index.js'));
 const New = lazy(() => import('./components/contact/new.js'));
 const Show = lazy(() => import('./components/contact/show.js'));
-
+const Search = lazy(() => import('./components/contact/search.js'));
 
 
 const rootElement = document.getElementById("root");
@@ -29,7 +29,8 @@ root.render(
               {/* <Route index element={<Home />} */}
                 <Route path="contacts" element={<Index />} />
                 <Route path="new_contact" element={<New />} />
-                <Route path="contact/:id" element={<Show />} />
+                <Route path="contact" element={<Show />} />
+                <Route path="search" element={<Search />} />
               </Route>
             </Routes>
           </BrowserRouter>
