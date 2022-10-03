@@ -1,47 +1,41 @@
 
 import Worker from '../models/worker.js';
 
+        
 
 export const index = (req, res, next) =>{
-    // The index method for contacts that gives us all of them
+    // The index method for workers that gives us all of them
     Worker.all()
     .then(([rows, fieldData]) => {
         res.json(rows);
     })
-    .catch(err => res.json({message: "We couldn't find any workers"}));
+    .catch(() => res.status(500).json({message: "Something went wrong on our end. Try to reload the page and start again"}));
 };
 
-export const create = (req, res, next) => {
-    // Here we create new workers
-    //Need to figure out how to properly validate if worker already exists
-    const worker = new Worker(
-        null, req.body.company, req.body.name, req.body.email, req.body.number, req.body.title, req.body.old_address, req.body.new_address, req.body.category,  
-        req.body.broker_name, req.body.broker_company, req.body.broker_number, req.body.broker_email, req.body.architect_name, req.body.architect_company, req.body.architect_number, req.body.architect_email,  
-        req.body.consultant_name, req.body.consultant_company, req.body.consultant_number, req.body.consultant_email, req.body.notes
-        )
-    Contact.companyValidator(contact.company)
-    .then(([contact]) => {
-        if (contact){
-            res.json({message: "company already has a contact"});
+export const create = (req, res) => {
+    // Here we create new workers 
+    const worker = new Worker(null, req.body.name, req.body.email, req.body.admin)
+    Worker.workerUniquenessChecker(worker.email)
+    .then(([found_worker_element]) => {
+        if (found_worker_element.length !== 0){
+            res.status(500).json({message: "Company already has a worker with this email"});
         }
+        
         else{
-            contact.save()
-            .then(() => {
-                res.json({message: "Contact created successfully"})
+            worker.workerValidator(worker) ? 
+            worker.save()
+            .then((result) => {
+                Worker.findByID(result[0].insertId)
+                .then(([new_worker]) =>{
+                    res.json(new_worker)
+                })
+                .catch(() => res.status(500).json({message: "Worker findbyid error"}))
+                
             })
-            .catch(err => res.json({message: "Something went wrong when you tried to save your contact"}))
+            .catch((err) => console.log(err))
+            :
+            res.status(500).json({message: "Either the email does not exist or you didn't include both a name and an email "})
         }
     })
-    .catch(err => res.json({message: "Something went wrong on our end, very sorry"}) )
+    .catch(() => res.status(500).json({message: "Worker uniqueness check error"}))
     }
-
-// export const create = (req, res, next) => {
-//     const worker = new Worker(null, req.params.name, req.params.email, req.params.admin)
-//     worker.save()
-//     .then(() => {
-//         console.log('here');
-//     })
-//     .catch(err => console.log(err))
-// }
-
-//Now that I understand how to make this work, we just need to figure out how to work with React then we're gucci ;(

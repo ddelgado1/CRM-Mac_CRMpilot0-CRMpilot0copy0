@@ -35,11 +35,6 @@ app.use(express.json())
 app.use('/workers', workerRouter);
 app.use('/contacts', contactRouter);
 app.use('/workerContacts', workerContactRouter);
-// db.execute('SELECT * FROM workers')
-// .then(result => {
-//     console.log(result[0][0].name);
-//     console.log('here');
-// })
-// .catch(err => console.log(err));
+
 
 app.listen(3001);

@@ -1,4 +1,4 @@
-import './contact.scss'
+import '../components.scss';
 import { lookAtSpecificContact } from '../../actions/contact';
 import { useMemo, lazy, Suspense, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -60,7 +60,7 @@ const Index = () => {
     
     const dataMaker = () => {
         //This is how we make the array work in a way that 
-        if (contacts.searched_customers.length !== 0){
+        if (contacts.searched){
             customersIfNoSearchedCustomersElseSearchedCustomersRef.current = contacts.searched_customers
         }
         else{

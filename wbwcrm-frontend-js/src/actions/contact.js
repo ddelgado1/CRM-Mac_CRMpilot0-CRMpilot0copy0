@@ -4,26 +4,23 @@ export const getContacts = () => dispatch => {
   //Does exactly what it says it does
   axios.get("http://localhost:3001/contacts")
   .then(response => dispatch({ type: 'GET_ALL_CONTACTS', payload: response.data}))
-  .catch(err => dispatch({type: 'CONTACT_ERROR', payload: err.data}))
+  .catch(err => dispatch({type: 'CONTACT_ERROR', payload: err.response.data.message}))
 } 
 
 export const createContact = (contact_information, selected_workers) => dispatch => {
   //Does exactly what it says it does
   axios.post("http://localhost:3001/contacts", {contact: contact_information, workers: selected_workers})
   .then(response => {
-    dispatch({ type: 'CREATE_NEW_CONTACT', payload: {contact: response.data.contact[0], workers: response.data.workers}})
-      axios.post("http://localhost:3001/workerContacts", {contact_id: response.data.contact[0].id, workers: response.data.workers})
+    dispatch({ type: 'CREATE_NEW_CONTACT', payload: {contact: response.data.contact[0], workers: response.data.workers}}) 
+    axios.post("http://localhost:3001/workerContacts", {contact_id: response.data.contact[0].id, workers: response.data.workers})
       .then(response => { 
-        if (response.data.message){
-          dispatch({type: 'CONTACT_ERROR', payload: response.data.message})
-        }
-        else{
-          dispatch({type: 'DELETE_CONTACT_ERROR'})
+        dispatch({type: 'DELETE_CONTACT_ERROR'})
           dispatch({ type: 'CREATE_NEW_JOIN_TABLES', payload: response.data })
-        }
       })
+      .catch(err => dispatch({type: 'CONTACT_ERROR', payload: response.data.message}))
   })
-  .catch(err => dispatch({type: 'CONTACT_ERROR', payload: err.data}))
+  .catch(err => {
+    dispatch({type: 'CONTACT_ERROR', payload: err.response.data.message})})
 }
 
 export const lookAtSpecificContact = (contact_information, workers) => dispatch => {
@@ -48,20 +45,16 @@ export const destroyCustomer = (customer_id) => dispatch => {
     .then(() => {
       dispatch({type: 'JOIN_TABLE_ROWS_DESTROYED', payload: customer_id});
     })
-    .catch(err => dispatch({type: 'CONTACT_ERROR', payload: err.data}))
-  })
-  .catch(err => dispatch({type: 'CONTACT_ERROR', payload: err.data}))
+    .catch(err => dispatch({type: 'CONTACT_ERROR', payload: err.response.data.message}))
+  
+    })
+  .catch(err => dispatch({type: 'CONTACT_ERROR', payload: err.response.data.message}))
 }
 
 export const searchCustomers = (customer_search_qualities, worker_chosen, join_tables_ordered_by_customer_id) => dispatch => {
   //This is how we search for the customers if there are no workers selected
   dispatch({type: 'SEARCH_FOR_CUSTOMERS', payload: {search_qualities: customer_search_qualities, worker_id: worker_chosen.value, all_joins: join_tables_ordered_by_customer_id}});
 }
-
-// export const filterCustomersWithJoinTables = (join_table_customer_ids) => dispatch => {
-//   //After having confirmed that there are workers and confirming that workerContacts has updated, we then 
-//   dispatch({type: 'FINALIZE_SEARCH_FOR_CUSTOMERS', payload: join_table_customer_ids});
-// }
 
 export const deleteContactErrorsAndRevertSearchedCustomers = () => dispatch => {
   //Does exactly what it says it does

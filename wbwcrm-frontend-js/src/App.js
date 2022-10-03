@@ -1,6 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
 import { getContacts, deleteContactErrorsAndRevertSearchedCustomers } from './actions/contact.js';
-import { getWorkers } from './actions/worker';
+import { getWorkers, deleteWorkerErrors } from './actions/worker';
 import { getWorkersAndContactsJoin } from './actions/jointable'
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -11,15 +11,16 @@ const App = (props) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getContacts())
-        dispatch(getWorkers())
-        dispatch(getWorkersAndContactsJoin())
+        dispatch(getContacts());
+        dispatch(getWorkers());
+        dispatch(getWorkersAndContactsJoin());
       }, [dispatch]);
 
     const handleClick = (e) => {
-        //To delete errors on page change
+        //To delete errors on page change and reset contacts
         dispatch(deleteContactErrorsAndRevertSearchedCustomers());
-        dispatch(getContacts())
+        dispatch(deleteWorkerErrors());
+        dispatch(getContacts());
     }
     return(
         <div className='App'>
@@ -27,6 +28,7 @@ const App = (props) => {
                 <h3><Link to="contacts" onClick={e => handleClick(e)}>View All Customers</Link></h3>
                 <h3><Link to="new_contact" onClick={e => handleClick(e)}>Create a New Customer</Link></h3>
                 <h3><Link to="search" onClick={e => handleClick(e)}>Search Customers</Link></h3>
+                <h3><Link to="new_worker" onClick={e => handleClick(e)}>Add a New Worker</Link></h3>
             </header>
             <Outlet />
         </div>

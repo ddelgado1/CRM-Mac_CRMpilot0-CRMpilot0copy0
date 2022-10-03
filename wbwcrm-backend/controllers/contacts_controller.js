@@ -7,7 +7,7 @@ export const index = (req, res) =>{
     .then(([rows, fieldData]) => {
         res.json(rows);
     })
-    .catch(err => res.error(err));
+    .catch(err => res.status(500).json({message: "Something went wrong on our end. Try to reload the page and start again"}));
 };
 
 export const create = (req, res) => {
@@ -20,7 +20,7 @@ export const create = (req, res) => {
     Contact.companyValidator(contact.company)
     .then(([found_contact_element]) => {
         if (found_contact_element.length !== 0){
-            res.json({message: "company already has a contact"});
+            res.status(500).json({message: "Company already has an associated customer"});
         }
         
         else{
@@ -31,15 +31,15 @@ export const create = (req, res) => {
                 .then(([new_contact]) =>{
                     res.json({contact: new_contact, workers: req.body.workers})
                 })
-                .catch(err => res.error(err))
+                .catch(err => res.status(500).json({message: "We had some trouble saving on our end. Please try to reload page and try again"}))
                 
             })
-            .catch(err => res.error(err))
+            .catch(err => res.status(500).json({message: "We had some trouble saving on our end. Please try to reload page and try again"}))
             :
-            res.json({message: "Must have company name, contact name, workers, and category filled"})
+            res.status(500).json({message: "Must have company name, contact name, workers, and category filled"});
         }
     })
-    .catch(err => res.error(err) )
+    .catch(err => res.status(500).json({message: "Something went wrong on our end, please try to reload page and try again"}) )
     }
     
 export const update = async (req, res) => {
@@ -50,7 +50,7 @@ export const update = async (req, res) => {
         res.json(updated_contact[0])
     }
     catch (err){
-        res.error(err)
+        res.status(500).json({message: "Something went wrong when trying to save your notes. Try and reload the page and try again"})
     }
 }
 
@@ -58,5 +58,5 @@ export const destroy = (req, res) => {
     // Here is when we want to remove an existing contact
     Contact.deleteMe(req.body.id)
     .then(() => res.json("Contact deleted"))
-    .catch((err) => res.error(err))
+    .catch((err) => res.status(500).json({message: "Something went wrong when trying to save delete this. Try and reload the page and try again "}))
 }

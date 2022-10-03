@@ -1,9 +1,10 @@
-Need to work on making the errors in the controllers more robust (like actually throwing error codes) so that the errors are properly accounted for
+Need to work on making the errors in the controllers more robust (like actually throwing _**proper**_ error codes) so that the errors are properly accounted for
+Also need to make it so that we have a proper join table with cascading (most likely) (need to figure out how to get this working [probably stack exchange])
 
 ## Frontend:
 
 - General
-    - Need to setup Redux persist and navigation in general
+    - Need to setup Redux persist and sessions/cookies
     - Admin rights
     - Need to beef up our validators so that people can't change things with inspect element
     - Need to make error stuff better
@@ -12,14 +13,14 @@ Need to work on making the errors in the controllers more robust (like actually 
     - Index
         - Done!
     - New
-        - Need to get rid of errors on page change (only did it for contacts, need to also do it for the other two)
+        - Done!
     - Show 
         - Gotta make it so that the current customer is saved in session so we don't need to worry about them reloading the page and having it be blank
     - Search 
-        - Gotta set it up (since it's all frontend, it's just a matter of setting up a search page then using the filter feature on the table)
+        - Done!
 
 - Workers
-    - Need to work on all of it 
+    - Done with the stuff that isn't microsoft related
 
 - Calendar
     - Need to work on all of it
@@ -27,4 +28,8 @@ Need to work on making the errors in the controllers more robust (like actually 
 Back end:
 
 - Workers
+    - Done with the stuff that isn't microsoft related
+
+- Calendar
     - All of it
+

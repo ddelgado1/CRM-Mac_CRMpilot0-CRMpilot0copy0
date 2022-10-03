@@ -1,3 +1,4 @@
+
 /* contact_index.js and contact_index_table.js */
 
 /* ------------------------------------------------------------------------- */
@@ -43,7 +44,7 @@ table {
 
 /* ------------------------------------------------------------------------- */
 
-/* new.js */
+/* new.js for workers and customers */
 
 /* ------------------------------------------------------------------------- */
 
@@ -58,7 +59,7 @@ label {
   padding: 1em;
 }
 
-#submit_new_customer{
+.submit_new_button{
   /* The submit button for the new customer */
   margin-left: 1em;
 }
@@ -68,15 +69,20 @@ label {
   max-width: 10em;
 }
 
-#new_errors{
+#admin{
+  display: inline;
+  width: 100px;
+  margin-left: -40px;
+}
+
+
+
+.new_messages{
   /* The errors that occur on the new page */
   margin-left: 10px;
 }
 
-.show_h2_div{
-  /* The individual divs from the show page */
-  margin-left: 100px;
-}
+
 /* ------------------------------------------------------------------------- */
 
 
@@ -84,6 +90,10 @@ label {
 
 /* ------------------------------------------------------------------------- */
 
+.show_h2_div{
+  /* The individual divs from the show page */
+  margin-left: 100px;
+}
 
 #deletion_button{
   /* The deletion button itself */

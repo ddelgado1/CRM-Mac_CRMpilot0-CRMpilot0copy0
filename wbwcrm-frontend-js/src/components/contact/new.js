@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {createContact} from '../../actions/contact.js';
 import { useNavigate } from 'react-router-dom';
 
-import './contact.scss';
+import '../components.scss';
 
 const New = () => {
     const [customer, setCustomer] = useState(
@@ -49,10 +49,8 @@ const New = () => {
 
     useEffect(() => {
     //This useEffect is for determining if we've had our workersTables changed so that we can render our show and not worry about the index page having a lack of workers in it
-    if (hasBeenRenderedRef.current === true){
-        if (currentContactRef.current.errors === ""){
-            navigate("/contact");
-        }
+    if (hasBeenRenderedRef.current === true && currentContactRef.current.errors === ""){
+       navigate("/contact");
     }
     }, [workerContacts, navigate]) 
     
@@ -179,9 +177,9 @@ const New = () => {
                     Consultant Email: 
                     <input type="text" defaultValue={customer.consultant_email} id="consultant_email" onChange={e => handleChange(e)}></input>
                 </label>
-            <button type="submit" onClick={e => handleSubmit(e)} id="submit_new_customer">Submit</button>
+            <button type="submit" onClick={e => handleSubmit(e)} className="submit_new_button">Submit</button>
             </form>
-            <h2 id="new_errors">{contacts.errors}</h2>
+            <h2 className='new_messages'>{contacts.errors}</h2>
         </>
     )
 }

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateNotes, destroyCustomer } from '../../actions/contact';
 import { useNavigate } from 'react-router-dom';
 
-import './contact.scss';
+import '../components.scss';
 
 const Show = () => {
 
