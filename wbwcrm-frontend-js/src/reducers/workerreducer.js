@@ -2,7 +2,7 @@ const initialState = {
     workers: [],
     select_tag_worker_list: [],
     errors: "",
-    calendar_info: {}
+    calendar_info: []
 }
 
 export default function workerReducer(state = initialState, action){
@@ -32,7 +32,11 @@ export default function workerReducer(state = initialState, action){
         case 'USER_CALENDAR_INFORMATION':
             return{
                 ...state,
-                calendar_info: action.payload
+                calendar_info: action.payload.map(element => {
+                    return {attendees: element.attendees, categories: element.categories, 
+                        end: element.end.dateTime, start: element.start.dateTime, isAllDay: element.isAllDay, location: element.location, 
+                        recurrence: element.recurrence, subject: element.subject
+                }})
             }
         default:
             return{
