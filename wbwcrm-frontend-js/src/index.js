@@ -6,8 +6,11 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { PersistGate } from 'redux-persist/lib/integration/react';
-import { persistor, store } from './storeconfig';
+import  store  from './store.js';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "./authConfig";
 
 const App = lazy(() => import('./App'));
 const Index = lazy(() => import('./components/contact/contact_index.js'));
@@ -15,29 +18,32 @@ const NewCustomer = lazy(() => import('./components/contact/new.js'));
 const Show = lazy(() => import('./components/contact/show.js'));
 const Search = lazy(() => import('./components/contact/search.js'));
 const NewWorker = lazy(() => import('./components/worker/new.js'));
+const OutlookCalendarDisplay = lazy(() => import('./components/calendar/calendarDisplay.js'));
 
+const msalInstance = new PublicClientApplication(msalConfig);
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <Provider store={store} >
-      <PersistGate loading={null} persistor={persistor}>
         <Suspense fallback={<span>Loading...</span>}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<App />} >
-              {/* <Route index element={<Home />} */}
-                <Route path="contacts" element={<Index />} />
-                <Route path="new_contact" element={<NewCustomer />} />
-                <Route path="contact" element={<Show />} />
-                <Route path="search" element={<Search />} />
-                <Route path="new_worker" element={<NewWorker />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+        <MsalProvider instance={msalInstance}>
+            <BrowserRouter>
+              <Routes>
+                  <Route path="/" element={<App />} >
+                  {/* <Route index element={<Home />} */}
+                    <Route path="contacts" element={<Index />} />
+                    <Route path="new_contact" element={<NewCustomer />} />
+                    <Route path="contact" element={<Show />} />
+                    <Route path="search" element={<Search />} />
+                    <Route path="new_worker" element={<NewWorker />} />
+                    <Route path="calendar" element={<OutlookCalendarDisplay />} />
+                  </Route>
+              </Routes>
+            </BrowserRouter>
+          </MsalProvider>
         </Suspense>
-      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

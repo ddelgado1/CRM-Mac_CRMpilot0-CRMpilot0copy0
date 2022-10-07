@@ -4,7 +4,7 @@ Also need to make it so that we have a proper join table with cascading (most li
 ## Frontend:
 
 - General
-    - Need to setup Redux persist and sessions/cookies
+    - Update redux to toolkit
     - Admin rights
     - Need to beef up our validators so that people can't change things with inspect element
     - Need to make error stuff better
@@ -33,3 +33,5 @@ Back end:
 - Calendar
     - All of it
 
+So for the calendar and login, we just use microsoft toolkit to make the easy thing. For adding events, we need to make our own page that makes calls to the backend where we use the api to do this
+Now that I have access to the calendar (which we should put in its own component), we just need to make a means of adding new events

@@ -1,8 +1,6 @@
 
 import Worker from '../models/worker.js';
 
-        
-
 export const index = (req, res, next) =>{
     // The index method for workers that gives us all of them
     Worker.all()
@@ -39,3 +37,4 @@ export const create = (req, res) => {
     })
     .catch(() => res.status(500).json({message: "Worker uniqueness check error"}))
     }
+
