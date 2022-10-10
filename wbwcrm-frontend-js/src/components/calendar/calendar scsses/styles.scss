@@ -117,6 +117,37 @@
   background-color: $today-highlight-bg;
 }
 
+.event_picked{
+  /* If the main section of the show page is inaccessible, we do this to it */
+  pointer-events: none;
+  opacity: 20%;
+}
+
+#chosen_event{
+  position: relative;
+  display: block;  
+  min-width: 30%;
+  max-width: 50%;
+  margin: auto auto;
+  background: lightblue;
+}
+
+#chosen_event{
+  
+  span{
+    position: absolute;
+    top: 0;
+    right: 0;
+
+  }
+}
+
+h3{
+  position: relative;
+  text-align: center;
+}
+
+
 @import './toolbar';
 @import './event';
 @import './month';

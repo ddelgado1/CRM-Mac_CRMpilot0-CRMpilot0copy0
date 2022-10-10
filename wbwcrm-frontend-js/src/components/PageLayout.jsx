@@ -5,6 +5,7 @@ import { SignOutButton } from "./SignOutButton";
 import { Link } from 'react-router-dom';
 import { getContacts, deleteContactErrorsAndRevertSearchedCustomers } from '../actions/contact.js';
 import { deleteWorkerErrors } from '../actions/worker';
+import { deleteCalendarErrors } from "../actions/calendar";
 import { useDispatch } from 'react-redux';
 /**
  * Renders the header with a sign in/out button as well as all of the page links
@@ -18,6 +19,7 @@ export const PageLayout = (props) => {
     //To delete errors on page change and reset contacts
         dispatch(deleteContactErrorsAndRevertSearchedCustomers());
         dispatch(deleteWorkerErrors());
+        dispatch(deleteCalendarErrors());
         dispatch(getContacts());
     }
     return (

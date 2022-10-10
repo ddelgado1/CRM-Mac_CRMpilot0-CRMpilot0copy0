@@ -26,20 +26,3 @@ export const deleteWorkerErrors = () => dispatch => {
   dispatch({type: "REMOVE_WORKER_ERRORS"});
 }
 
-export const getCalendarInformation = (accessToken) => dispatch => {
-  //Gets us our calendar stuff
-
-    axios.get(`https://graph.microsoft.com/v1.0/me/events`,
-    {headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-          'Prefer' : 'outlook.body-content-type="text"'
-    }})
-    .then(response => {dispatch({type: 'USER_CALENDAR_INFORMATION', payload: response.data.value})})
-    .catch(error => console.log(error));
-  // .then(results => {
-  //   debugger;
-  //   dispatch({type: "USER_CALENDAR_INFORMATION", payload: results.data})
-  // })
-  // .catch(err => dispatch({type: 'WORKER_ERROR', payload: err.response.data.message}))
-}

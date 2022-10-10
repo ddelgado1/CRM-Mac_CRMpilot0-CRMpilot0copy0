@@ -31,7 +31,4 @@ Back end:
     - Done with the stuff that isn't microsoft related
 
 - Calendar
-    - All of it
-
-So for the calendar and login, we just use microsoft toolkit to make the easy thing. For adding events, we need to make our own page that makes calls to the backend where we use the api to do this
-Now that I have access to the calendar (which we should put in its own component), we just need to make a means of adding new events
+    - Just have to do the create event thing then we're done!

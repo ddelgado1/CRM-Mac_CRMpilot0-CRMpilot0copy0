@@ -33,9 +33,8 @@ export default function workerReducer(state = initialState, action){
             return{
                 ...state,
                 calendar_info: action.payload.map(element => {
-                    return {attendees: element.attendees, categories: element.categories, 
-                        end: element.end.dateTime, start: element.start.dateTime, isAllDay: element.isAllDay, location: element.location, 
-                        recurrence: element.recurrence, subject: element.subject
+                    return {title: element.subject, attendees: element.attendees, start: element.start.dateTime, end: element.end.dateTime, isAllDay: element.isAllDay, categories: element.categories, location: element.location, 
+                        recurrence: element.recurrence, id: element.id
                 }})
             }
         default:
