@@ -32,7 +32,6 @@ root.render(
             <BrowserRouter>
               <Routes>
                   <Route path="/" element={<App />} >
-                  {/* <Route index element={<Home />} */}
                     <Route path="contacts" element={<Index />} />
                     <Route path="new_contact" element={<NewCustomer />} />
                     <Route path="contact" element={<Show />} />

@@ -21,6 +21,11 @@ export const createWorker = (worker_information) => dispatch => {
   }
 }
 
+export const setCurrentWorker = (worker_information) => dispatch => {
+  //Once we have confirmation that the worker is signed in, we set the current worker to be this
+  dispatch({type: 'SET_CURRENT_WORKER', payload: worker_information});
+}
+
 export const deleteWorkerErrors = () => dispatch => {
   //Does exactly what it says it does
   dispatch({type: "REMOVE_WORKER_ERRORS"});

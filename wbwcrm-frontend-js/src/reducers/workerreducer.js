@@ -1,6 +1,7 @@
 const initialState = {
     workers: [],
     select_tag_worker_list: [],
+    current_worker: {},
     errors: "",
     calendar_info: []
 }
@@ -18,6 +19,11 @@ export default function workerReducer(state = initialState, action){
                 ...state,
                 workers: [...state.workers, action.payload[0]],
                 select_tag_worker_list: [...state, {label: action.payload[0].name, value: action.payload[0].id}] 
+            }
+        case 'SET_CURRENT_WORKER':
+            return{
+                ...state,
+                current_worker: action.payload
             }
         case 'WORKER_ERROR':
             return{

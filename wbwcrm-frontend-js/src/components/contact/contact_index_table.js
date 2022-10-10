@@ -30,7 +30,7 @@ const Table = ({ columns, data }) => {
       )
   
       return (
-        <>
+        <div id="tableDiv">
           <table {...getTableProps()}>
             <thead>
               {headerGroups.map(headerGroup => (
@@ -93,7 +93,7 @@ const Table = ({ columns, data }) => {
               ))}
             </select>
           </div>
-        </>
+        </div>
       )
     }
 

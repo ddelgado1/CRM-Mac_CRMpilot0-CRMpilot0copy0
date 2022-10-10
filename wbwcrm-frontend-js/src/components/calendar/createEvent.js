@@ -1,18 +1,41 @@
 import {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {searchCustomers, deleteContactErrorsAndRevertSearchedCustomers} from '../../actions/contact.js';
+import {searchCustomers} from '../../actions/contact.js';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
 import '../components.scss';
 
-const Search = () => {
-    const [customer, setCustomer] = useState(
+const CreateEvent = () => {
+    const [eventData, setEventData] = useState(
+        // Potentially I will include the google maps API so I can allow for the location search but for now let's leave it out
         {
-         company: "",
-         contact_name: "",
-         category: ""
-        });
+            subject: '',
+            body: {
+              contentType: 'HTML',
+              content: ''
+            },
+            start: {
+                dateTime: '',
+                timeZone: ''
+            },
+            end: {
+                dateTime: '',
+                timeZone: ''
+            },
+            location: {
+                displayName: ''
+            },
+            attendees: [
+              {
+                emailAddress: {
+                  address: '',
+                  name: ''
+                },
+                type: ''
+              }
+            ],
+          });
 
     const [selected, setSelected] = useState({}); //This determines what has and hasn't been selected yet with workers
 
@@ -36,7 +59,6 @@ const Search = () => {
     const handleSubmit = (e) => {
         //Handles submitting the form
         e.preventDefault();
-        dispatch(deleteContactErrorsAndRevertSearchedCustomers());
         hasRenderedRef.current = true;
         dispatch(searchCustomers(customer, selected, workerContacts.tables_ordered_by_customer))
         
@@ -89,4 +111,7 @@ const Search = () => {
     )
 }
 
-export default Search;
+export default CreateEvent;
+
+
+

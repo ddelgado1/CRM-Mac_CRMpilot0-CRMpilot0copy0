@@ -28,6 +28,9 @@ const New = () => {
         if (renderedAlreadyRef.current === true && allWorkers.errors === ""){
             setSuccessMessage("Worker created successfully");
         }
+        else{
+            setSuccessMessage(null);
+        }
     }, [allWorkers])
 
     const handleSubmit = (e) => {

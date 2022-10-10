@@ -140,12 +140,13 @@
     right: 0;
 
   }
+  h3{
+    position: relative;
+    text-align: center;
+  }
 }
 
-h3{
-  position: relative;
-  text-align: center;
-}
+
 
 
 @import './toolbar';

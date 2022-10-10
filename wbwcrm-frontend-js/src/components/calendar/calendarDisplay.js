@@ -37,7 +37,6 @@ const OutlookCalendar = (props) => {
           dispatch(getCalendarInformation(accessToken))
         })
   }, [instance, accounts, dispatch]);
-
   useEffect(() => {
     //This is to make the data in the calendar_info variable viable for the events in the Calendar component
     if (calendar_info.length !== 0){

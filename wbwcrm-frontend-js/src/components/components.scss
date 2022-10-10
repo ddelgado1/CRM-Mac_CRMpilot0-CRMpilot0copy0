@@ -3,11 +3,8 @@
 /* ------------------------------------------------------------------------- */
 .index {
   /* The main div for the contact_index component */
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 2%;
+ 
 }
 
 table {
@@ -35,11 +32,19 @@ table {
   }
 }
 
-.pagination {
-  /* The pagination aspect in the index table */
-  position: absolute;
-  margin-top: 40%;
+#tableDiv{
+  /* This is the main div for the table itself */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+.pagination{
+  padding: 10px;
+}
+
+
 
 /* ------------------------------------------------------------------------- */
 

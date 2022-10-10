@@ -13,6 +13,10 @@ const Show = () => {
     const customerChosen = useSelector((state) => state.contacts.selected_customer); //This is the current customer we get from redux
     const selectedWorkers = useSelector((state) => state.contacts.selected_customer_workers); //These are the workers themselves
     const customerErrors = useSelector((state) => state.contacts.errors); //These are the customer errors
+    const currentWorker = useSelector((state) => state.workers.current_worker); //This is our current worker 
+    const workerContacts = useSelector((state) => state.workerContacts.tables); //These are the join table rows 
+
+
     const [currentNotesInTextArea, setCurrentNotesInTextArea] = useState(""); //This will start off as an empty string and change as the user types in the notes field
     const [confirmComponentVisibility, setConfirmComponentVisibility] = useState("confirm_invisible"); //When it's on "confirm_invisible" the user can't interact and it's invisible. Otherwise they can access it
     const [mainDivAccessible, setMainDivAccessible] = useState("accessible") //If this is on "accessible", then the user should be able to utilize it. If not (when the confirm is up), we will disable it
@@ -93,6 +97,12 @@ const Show = () => {
         
     }
 
+    const checkIfHasAccess = () => {
+        //This function will determine if the user has access to add notes
+        const filterJoinTableRowsBasedOnCustomerIDAndWorkerID = workerContacts.filter(workerContact => workerContact.contact_id === customerChosen.id && workerContact.worker_id === currentWorker.id)
+        return filterJoinTableRowsBasedOnCustomerIDAndWorkerID.length === 0 ? false : true
+    }
+
     return(
         <>
             <div id="confirm_box" className={confirmComponentVisibility}>
@@ -106,10 +116,11 @@ const Show = () => {
                 <div key={`notes_${customerChosen.id}`} className='show_h2_div'>
                     <h2>Notes:</h2>
                     <h3 id="customer_chosen_notes">{customerChosen.notes}</h3>
-                    <textarea id='notes_textarea' defaultValue={currentNotesInTextArea} onChange={e => handleChangeInNotes(e)}></textarea><br/>
-                    <button onClick={e => handleSubmission(e)}>Submit Notes</button>
+                    {checkIfHasAccess() && <textarea id='notes_textarea' defaultValue={currentNotesInTextArea} onChange={e => handleChangeInNotes(e)}></textarea>}
+                    <br/>
+                    {checkIfHasAccess() && <button onClick={e => handleSubmission(e)}>Submit Notes</button>}
                 </div>
-                <button id="deletion_button" onClick={e => handleDeleteButtonClicked(e)}>Delete this Customer</button>
+                {currentWorker.admin === 1 && <button id="deletion_button" onClick={e => handleDeleteButtonClicked(e)}>Delete this Customer</button>}
             </div>
         </>
     )
