@@ -13,38 +13,23 @@ import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./authConfig";
 
 const App = lazy(() => import('./App'));
-const Index = lazy(() => import('./components/contact/contact_index.js'));
-const NewCustomer = lazy(() => import('./components/contact/new.js'));
-const Show = lazy(() => import('./components/contact/show.js'));
-const Search = lazy(() => import('./components/contact/search.js'));
-const NewWorker = lazy(() => import('./components/worker/new.js'));
-const OutlookCalendarDisplay = lazy(() => import('./components/calendar/calendarDisplay.js'));
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 root.render(
-  <React.StrictMode>
     <Provider store={store} >
         <Suspense fallback={<span>Loading...</span>}>
         <MsalProvider instance={msalInstance}>
             <BrowserRouter>
               <Routes>
-                  <Route path="/" element={<App />} >
-                    <Route path="contacts" element={<Index />} />
-                    <Route path="new_contact" element={<NewCustomer />} />
-                    <Route path="contact" element={<Show />} />
-                    <Route path="search" element={<Search />} />
-                    <Route path="new_worker" element={<NewWorker />} />
-                    <Route path="calendar" element={<OutlookCalendarDisplay />} />
-                  </Route>
+                  <Route path="*" element={<App />} />
               </Routes>
             </BrowserRouter>
           </MsalProvider>
         </Suspense>
     </Provider>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

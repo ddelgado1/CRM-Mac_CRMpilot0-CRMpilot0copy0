@@ -14,7 +14,7 @@ export const createWorker = (worker_information) => dispatch => {
       dispatch({ type: 'CREATE_NEW_WORKER', payload: response.data}) 
     })
     .catch(err => {
-      dispatch({type: 'WORKER_ERROR', payload: err.response.data.message})})
+      dispatch({type: 'WORKER_ERROR', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}})})
   }
   else{
     dispatch({type: 'WORKER_ERROR', payload: "Email and confirmation email do not match"})
@@ -24,10 +24,5 @@ export const createWorker = (worker_information) => dispatch => {
 export const setCurrentWorker = (worker_information) => dispatch => {
   //Once we have confirmation that the worker is signed in, we set the current worker to be this
   dispatch({type: 'SET_CURRENT_WORKER', payload: worker_information});
-}
-
-export const deleteWorkerErrors = () => dispatch => {
-  //Does exactly what it says it does
-  dispatch({type: "REMOVE_WORKER_ERRORS"});
 }
 

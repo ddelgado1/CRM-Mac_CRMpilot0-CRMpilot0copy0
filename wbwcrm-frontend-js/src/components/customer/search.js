@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {searchCustomers, deleteContactErrorsAndRevertSearchedCustomers} from '../../actions/contact.js';
+import {searchCustomers, revertSearchedCustomers} from '../../actions/customer.js';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
@@ -10,7 +10,7 @@ const Search = () => {
     const [customer, setCustomer] = useState(
         {
          company: "",
-         contact_name: "",
+         customer_name: "",
          category: ""
         });
 
@@ -20,25 +20,25 @@ const Search = () => {
     const navigate = useNavigate();
 
     const search_select_workers = useSelector((state) => state.workers.select_tag_worker_list);
-    const contacts = useSelector((state) => state.contacts);
-    const workerContacts = useSelector((state) => state.workerContacts);
+    const customers = useSelector((state) => state.customers);
+    const workerCustomers = useSelector((state) => state.workerCustomers);
 
     const hasRenderedRef = useRef(false); //This determines if it's been rendered yet so we don't risk navigating on render
 
     useEffect(() => {
         //Navigates to the index page on the change of searched_customers
-        if (hasRenderedRef.current === true && contacts.errors === ""){
-            navigate("/contacts");
+        if (hasRenderedRef.current === true && customers.search_message === null && customers.searched === true){
+            navigate("/customers");
         };
         
-    }, [contacts, navigate]);
+    }, [customers, navigate, dispatch]);
    
     const handleSubmit = (e) => {
         //Handles submitting the form
         e.preventDefault();
-        dispatch(deleteContactErrorsAndRevertSearchedCustomers());
+        dispatch(revertSearchedCustomers());
         hasRenderedRef.current = true;
-        dispatch(searchCustomers(customer, selected, workerContacts.tables_ordered_by_customer))
+        dispatch(searchCustomers(customer, selected, workerCustomers.worker_customers_ordered_by_customer))
         
     }
 
@@ -62,8 +62,8 @@ const Search = () => {
                     <input type="text" defaultValue={customer.company} id="company" onChange={e => handleChange(e)}></input>
                 </label>
                 <label>
-                    Contact: 
-                    <input type="text" defaultValue={customer.contact_name} id="contact_name" onChange={e => handleChange(e)}></input>
+                    Customer: 
+                    <input type="text" defaultValue={customer.customer_name} id="customer_name" onChange={e => handleChange(e)}></input>
                 </label>
                 <label>
                     Category: 
@@ -84,7 +84,7 @@ const Search = () => {
                 </label>
             <button type="submit" onClick={e => handleSubmit(e)} className="submit_new_button">Submit</button>
             </form>
-            <h2 className='new_messages'>{contacts.errors}</h2>
+            <h2 className='new_messages'>{customers.search_message}</h2>
         </>
     )
 }

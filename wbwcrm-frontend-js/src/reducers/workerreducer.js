@@ -1,8 +1,8 @@
 const initialState = {
     workers: [],
+    workers_succeeded: false, //The purpose of this is that when we start the webpage, if we have no workers at all, we run the risk of having it load forever. Instead, we'll change this and load based on if this is true or not instead of if there are workers or not
     select_tag_worker_list: [],
     current_worker: {},
-    errors: "",
     calendar_info: []
 }
 
@@ -12,7 +12,8 @@ export default function workerReducer(state = initialState, action){
             return{
                 ...state,
                 workers: action.payload,
-                select_tag_worker_list: action.payload.map(worker_object => ({label: worker_object.name, value: worker_object.id}))
+                select_tag_worker_list: action.payload.map(worker_object => ({label: worker_object.name, value: worker_object.id})),
+                workers_succeeded: true
             }
         case 'CREATE_NEW_WORKER':
             return{
@@ -24,16 +25,6 @@ export default function workerReducer(state = initialState, action){
             return{
                 ...state,
                 current_worker: action.payload
-            }
-        case 'WORKER_ERROR':
-            return{
-                ...state,
-                errors: action.payload
-            }
-        case 'REMOVE_WORKER_ERRORS':
-            return{
-                ...state,
-                errors: ''
             }
         case 'USER_CALENDAR_INFORMATION':
             return{

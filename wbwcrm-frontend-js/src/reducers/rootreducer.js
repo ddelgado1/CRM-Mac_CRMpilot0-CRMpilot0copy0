@@ -1,9 +1,9 @@
 import { withReduxStateSync } from 'redux-state-sync';
 
 import {combineReducers} from 'redux';
-import contactReducer from './contactreducer';
+import customerReducer from './customerreducer';
 import workerReducer from './workerreducer';
-import workerContactReducer from './jointablereducer';
-import calendarReducer from './calendarreducer';
+import workerCustomerReducer from './workercustomerreducer';
+import errorReducer from './errorreducer';
 
-export default withReduxStateSync(combineReducers({contacts: contactReducer, workers: workerReducer, workerContacts: workerContactReducer, calendar: calendarReducer}))
+export default withReduxStateSync(combineReducers({customers: customerReducer, workers: workerReducer, workerCustomers: workerCustomerReducer, errors: errorReducer}))

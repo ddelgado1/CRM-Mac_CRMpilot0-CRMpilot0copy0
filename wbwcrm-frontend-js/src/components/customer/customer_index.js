@@ -1,20 +1,20 @@
 import '../components.scss';
-import { lookAtSpecificContact } from '../../actions/contact';
+import { lookAtSpecificCustomer } from '../../actions/customer';
 import { useMemo, lazy, Suspense, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const Table = lazy(() => import('./contact_index_table.js'));
+const Table = lazy(() => import('./customer_index_table.js'));
 
 
 const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const contacts = useSelector((state) => state.contacts) // Here are all of the contacts
+    const customers = useSelector((state) => state.customers) // Here are all of the customers
     const customersIfNoSearchedCustomersElseSearchedCustomersRef = useRef([]) //The reason we're including this is that if there are searched customers, we want to use them instead of all customers
     const workers = useSelector((state) => state.workers)
-    const workerContacts = useSelector((state) => state.workerContacts)
+    const workerCustomers = useSelector((state) => state.workerCustomers)
     
 
     const columns = useMemo( //These are the columns for the table we're using
@@ -27,8 +27,8 @@ const Index = () => {
                 accessor: 'company',
               },
               {
-                Header: 'Contact Name',
-                accessor: 'contact_name',
+                Header: 'Customer Name',
+                accessor: 'customer_name',
               },
               {
                 Header: 'Category',
@@ -48,23 +48,23 @@ const Index = () => {
         []
       )
     
-    const workerListMaker = (id_of_contact) => {
-        //Using join table to get worker information 
+    const workerListMaker = (id_of_customer) => {
+        //Using worker_customers to get worker information 
         const workers_list = [];
-        const join_list = workerContacts.tables.filter(x => x.contact_id === id_of_contact);
-        for (const join_table of join_list){
-            workers_list.push(workers.workers.find(worker => worker.id === join_table.worker_id).name)
+        const worker_customers_list = workerCustomers.worker_customers.filter(x => x.customer_id === id_of_customer);
+        for (const worker_customer of worker_customers_list){
+            workers_list.push(workers.workers.find(worker => worker.id === worker_customer.worker_id).name)
         }
         return workers_list
     }
     
     const dataMaker = () => {
         //This is how we make the array work in a way that 
-        if (contacts.searched){
-            customersIfNoSearchedCustomersElseSearchedCustomersRef.current = contacts.searched_customers
+        if (customers.searched){
+            customersIfNoSearchedCustomersElseSearchedCustomersRef.current = customers.searched_customers
         }
         else{
-            customersIfNoSearchedCustomersElseSearchedCustomersRef.current = contacts.contacts
+            customersIfNoSearchedCustomersElseSearchedCustomersRef.current = customers.customers
         }
         return (customersIfNoSearchedCustomersElseSearchedCustomersRef.current.map((individual_customer) => {
             const workers_array = workerListMaker(individual_customer.id).map((worker, index, workers) => {
@@ -78,7 +78,7 @@ const Index = () => {
             return(
                 {
                     company: individual_customer.company,
-                    contact_name: individual_customer.contact_name,
+                    customer_name: individual_customer.customer_name,
                     category: individual_customer.category,
                     workers: workers_array,
                     customer_button: <button onClick={e => handleClick(e, individual_customer)}>Click To see</button>
@@ -87,14 +87,14 @@ const Index = () => {
         }))
     }
     
-    const handleClick = (e, chosen_contact) => {
+    const handleClick = (e, chosen_customer) => {
         //This should mean they clicked on a choice and now they're supposed to be routed to the show page of that specific customer
-        dispatch(lookAtSpecificContact(chosen_contact, workerListMaker(chosen_contact.id)))
-        navigate('/contact')
+        dispatch(lookAtSpecificCustomer(chosen_customer, workerListMaker(chosen_customer.id)))
+        navigate('/customer')
         /* Route to page once redux saves the information */
     }
 
-    if (workerContacts.tables.length === 0 || contacts.contacts.length === 0 || workers.workers.length === 0 || workerContacts.tables.length === 0){
+    if (workerCustomers.worker_customers_succeeded === false || customers.customers_succeeded === false || workers.workers_succeeded === false ){
         return <h1>Loading...</h1>
     }
     else{

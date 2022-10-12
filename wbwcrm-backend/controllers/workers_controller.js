@@ -16,7 +16,7 @@ export const create = (req, res) => {
     Worker.workerUniquenessChecker(worker.email)
     .then(([found_worker_element]) => {
         if (found_worker_element.length !== 0){
-            res.status(500).json({message: "Company already has a worker with this email"});
+            res.status(406).json({message: "Company already has a worker with this email"});
         }
         
         else{
@@ -27,14 +27,14 @@ export const create = (req, res) => {
                 .then(([new_worker]) =>{
                     res.json(new_worker)
                 })
-                .catch(() => res.status(500).json({message: "Worker findbyid error"}))
+                .catch(() => res.status(500).json({message: "Something went wrong on our end. Try to reload the page and start again"}))
                 
             })
             .catch((err) => console.log(err))
             :
-            res.status(500).json({message: "Either the email does not exist or you didn't include both a name and an email "})
+            res.status(406).json({message: "Either the email does not exist or you didn't include both a name and an email "})
         }
     })
-    .catch(() => res.status(500).json({message: "Worker uniqueness check error"}))
+    .catch(() => res.status(500).json({message: "There is already a worker with this email registered"}))
     }
 

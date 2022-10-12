@@ -16,7 +16,7 @@ const OutlookCalendar = (props) => {
   const { instance, accounts } = useMsal();
     
   const dispatch = useDispatch();
-  const calendar_info = useSelector((state) => state.workers.calendar_info) // Here are all of the contacts
+  const calendar_info = useSelector((state) => state.workers.calendar_info) // Here are all of the customers
   const calendarViableRef = useRef([]); // In the useEffect, we will add elements to this to have a list of viable elements
   const [calendarClassName, setCalendarClassName] = useState("normal");
   const [eventChosenDiv, setEventChosenDiv] = useState(null);

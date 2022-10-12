@@ -1,13 +1,11 @@
-Need to work on making the errors in the controllers more robust (like actually throwing _**proper**_ error codes) so that the errors are properly accounted for
-Also need to make it so that we have a proper join table with cascading (most likely) (need to figure out how to get this working [probably stack exchange])
+Need to make it so that we have a proper join table with cascading (most likely) (need to figure out how to get this working [probably stack exchange])
 
 ## Frontend:
 
 - General
     - Update redux to toolkit
-    - Need to make error stuff better
-    - Need to beef up our validators so that people can't change things with inspect element (need to figure out what this means lol)
-    
+    - For database.js in /wbwcrm-backend/util, need to make an environment variable for password rather than having it in plaintext
+    - Figure out why, suddenly, calendar isn't rendering unless I resave my file
 
 - Contacts
     - Index
@@ -20,17 +18,13 @@ Also need to make it so that we have a proper join table with cascading (most li
         - Done!
 
 - Workers
-    - Done with the stuff that isn't microsoft related
-
-- Calendar
-    - Need to work on all of it
-
-Back end:
-
-- Workers
-    - Done with the stuff that isn't microsoft related
+    - Done!
 
 - Calendar
     - Just have to do the create event thing then we're done!
         - My concern with this is that it doesn't make sense from a functionality standpoint. It is way easier to just go to the outlook website and create the event there. I can, I guess, comprehend having the calendar there but I just don't 
         think my website will be more efficient than just opening a new tab
+
+Back end:
+
+Done!

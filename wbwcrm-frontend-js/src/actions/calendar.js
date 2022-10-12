@@ -10,10 +10,5 @@ export const getCalendarInformation = (accessToken) => dispatch => {
             'Prefer' : 'outlook.body-content-type="text"'
       }})
       .then(response => {dispatch({type: 'USER_CALENDAR_INFORMATION', payload: response.data.value})})
-      .catch(() => dispatch({type: 'CALENDAR_ERROR', payload: "Can't find calendar for account"}));
-  }
-
-  export const deleteCalendarErrors = () => dispatch => {
-    //Does exactly what it says it does
-    dispatch({type: "REMOVE_CALENDAR_ERRORS"});
+      .catch(err => dispatch({type: 'CALENDAR_ERROR', payload: {err_message: "Can't find calendar for account", err_code: err.response.request.status, err_value: err.response.request.statusText}}));
   }

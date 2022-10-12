@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateNotes, destroyCustomer } from '../../actions/contact';
+import { updateNotes, destroyCustomer } from '../../actions/customer';
 import { useNavigate } from 'react-router-dom';
 
 import '../components.scss';
@@ -10,11 +10,11 @@ const Show = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const customerChosen = useSelector((state) => state.contacts.selected_customer); //This is the current customer we get from redux
-    const selectedWorkers = useSelector((state) => state.contacts.selected_customer_workers); //These are the workers themselves
-    const customerErrors = useSelector((state) => state.contacts.errors); //These are the customer errors
+    const customerChosen = useSelector((state) => state.customers.selected_customer); //This is the current customer we get from redux
+    const selectedWorkers = useSelector((state) => state.customers.selected_customer_workers); //These are the workers themselves
     const currentWorker = useSelector((state) => state.workers.current_worker); //This is our current worker 
-    const workerContacts = useSelector((state) => state.workerContacts.tables); //These are the join table rows 
+    const workerCustomers = useSelector((state) => state.workerCustomers.worker_customers); //These are the join table rows 
+    const errors = useSelector((state) => state.errors.error)
 
 
     const [currentNotesInTextArea, setCurrentNotesInTextArea] = useState(""); //This will start off as an empty string and change as the user types in the notes field
@@ -25,11 +25,11 @@ const Show = () => {
     useEffect(() => {
         //When the customer gets deleted (if there are no errors), we navigate to the main page
         if (Object.keys(customerChosen).length === 0){
-            if (customerErrors === ""){
-                navigate("/contacts");
+            if (Object.keys(errors).length === 0){
+                navigate("/customers");
             }
         }
-    }, [customerChosen, customerErrors, navigate])
+    }, [customerChosen, errors, navigate])
 
     const renderMaker = () => {
         //Depending on which keys of the customer are non-empty, those get rendered, and the others don't 
@@ -43,7 +43,7 @@ const Show = () => {
                     </div>
                 )
             }
-            if (key === "contact_title"){
+            if (key === "customer_title"){
                 divs.push(
                 <div key="workers" className='show_h2_div'>
                     <h2>Workers</h2>
@@ -99,8 +99,8 @@ const Show = () => {
 
     const checkIfHasAccess = () => {
         //This function will determine if the user has access to add notes
-        const filterJoinTableRowsBasedOnCustomerIDAndWorkerID = workerContacts.filter(workerContact => workerContact.contact_id === customerChosen.id && workerContact.worker_id === currentWorker.id)
-        return filterJoinTableRowsBasedOnCustomerIDAndWorkerID.length === 0 ? false : true
+        const filterWorkerCustomersBasedOnCustomerIDAndWorkerID = workerCustomers.filter(workerCustomer => workerCustomer.customer_id === customerChosen.id && workerCustomer.worker_id === currentWorker.id)
+        return filterWorkerCustomersBasedOnCustomerIDAndWorkerID.length === 0 ? false : true
     }
 
     return(

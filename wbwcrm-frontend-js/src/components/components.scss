@@ -1,8 +1,8 @@
-/* contact_index.js and contact_index_table.js */
+/* customer_index.js and customer_index_table.js */
 
 /* ------------------------------------------------------------------------- */
 .index {
-  /* The main div for the contact_index component */
+  /* The main div for the customer_index component */
   margin-top: 2%;
  
 }
@@ -148,4 +148,15 @@ label {
 
 #select_search{
   width: 300px;
+}
+
+
+/* ------------------------------------------------------------------------- */
+
+/* forbidden.js */
+
+/* ------------------------------------------------------------------------- */
+
+#Forbidden{
+  text-align: center;
 }
