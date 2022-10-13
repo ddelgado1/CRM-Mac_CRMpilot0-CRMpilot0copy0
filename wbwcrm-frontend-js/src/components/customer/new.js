@@ -35,8 +35,7 @@ const New = () => {
 
     const dispatch = useDispatch();
     const workers = useSelector((state) => state.workers);
-    const errors = useSelector((state) => state.errors.error)
-    const workerCustomers = useSelector((state) => state.workerCustomers);
+    const errors = useSelector((state) => state.errors.error);
     const selectedWorker = useSelector((state) => state.workers.current_worker); //We will be using this to determine if the user has a right to access this page
 
 
@@ -53,7 +52,7 @@ const New = () => {
         else{
             hasBeenRenderedRef.current = false
         }
-        }, [workerCustomers, errors, navigate]) 
+        }, [errors, navigate]) 
 
 
     

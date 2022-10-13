@@ -14,10 +14,11 @@ export const createWorker = (worker_information) => dispatch => {
       dispatch({ type: 'CREATE_NEW_WORKER', payload: response.data}) 
     })
     .catch(err => {
-      dispatch({type: 'WORKER_ERROR', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}})})
+      console.log(err)
+      dispatch({type: 'ERROR_CAUGHT', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}})})
   }
   else{
-    dispatch({type: 'WORKER_ERROR', payload: "Email and confirmation email do not match"})
+    dispatch({type: 'ERROR_CAUGHT', payload: {err_message: "Email and confirmation email do not match", err_code: 406, err_value: "didn't work"}})
   }
 }
 

@@ -13,6 +13,13 @@ import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./authConfig";
 
 const App = lazy(() => import('./App'));
+const Index = lazy(() => import('./components/customer/customer_index.js'));
+const NewCustomer = lazy(() => import('./components/customer/new.js'));
+const Show = lazy(() => import('./components/customer/show.js'));
+const Search = lazy(() => import('./components/customer/search.js'));
+const NewWorker = lazy(() => import('./components/worker/new.js'));
+const OutlookCalendarDisplay = lazy(() => import('./components/calendar/calendarDisplay.js'));
+const OutlookCalendarEventCreate = lazy(() => import('./components/calendar/createEvent.js'));
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -24,7 +31,15 @@ root.render(
         <MsalProvider instance={msalInstance}>
             <BrowserRouter>
               <Routes>
-                  <Route path="*" element={<App />} />
+                  <Route path="/" element={<App />}>
+                    <Route path="customers" element={<Index />} />
+                    <Route path="new_customer" element={<NewCustomer />} />
+                    <Route path="customer" element={<Show />} />
+                    <Route path="search" element={<Search />} />
+                    <Route path="new_worker" element={<NewWorker />} />
+                    <Route path="calendar" element={<OutlookCalendarDisplay />} />
+                    <Route path="event_create" element={<OutlookCalendarEventCreate />} />
+                  </Route>
               </Routes>
             </BrowserRouter>
           </MsalProvider>

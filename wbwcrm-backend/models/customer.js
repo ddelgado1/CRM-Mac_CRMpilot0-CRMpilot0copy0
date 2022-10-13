@@ -59,9 +59,16 @@ class Customer{
         return db.execute('UPDATE customers SET notes = CONCAT(?, ?) WHERE id = ?', [old_notes, new_notes_text, new_notes_id]);
     }
 
-    static deleteMe(customer_id){
+    static async deleteMe(customer_id){
         //Uses SQL to delete an individual customer element
-        return db.execute('DELETE FROM customers WHERE id = ?', [customer_id]);
+        try {
+            await db.execute('DELETE FROM customers WHERE id = ?', [customer_id]);
+            await db.execute('DELETE FROM workercustomers WHERE workerCustomers.customer_id = ?', [customer_id]);
+            await db.execute("COMMIT");
+        }
+        catch (err){
+            await db.execute("ROLLBACK")
+        } 
     }
 
     

@@ -19,9 +19,4 @@ export const create = (req, res, next) => {
     Promise.all(newWorkerCustomersPromiseArray).then((values) => res.json(values.map(val => val[0]).flat()))
 }
 
-export const destroy = (req, res) => {
-    // Here is when we want to remove an existing customer
-    WorkerCustomer.deleteMe(req.body.id)
-    .then(() => res.json("WorkerCustomer tables deleted"))
-    .catch(err => res.status(500).json({message: "Something went wrong on our end. Try to reload the page and start again"}))
-}
+

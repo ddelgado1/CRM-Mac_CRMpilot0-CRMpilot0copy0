@@ -19,20 +19,17 @@ const New = () => {
     const [successMessage, setSuccessMessage] = useState(null); //If there's a success in the uploading process, we simply will put a message at the bottom.
 
     const dispatch = useDispatch();
-    const allWorkers = useSelector((state) => state.workers);//We're going to use this to both get an error message if there is any as well as let us know when we've had a success
+    const errors = useSelector((state) => state.errors.error);
     const selectedWorker = useSelector((state) => state.workers.current_worker); //We will be using this to determine if the user has a right to access this page
-
+ 
     const renderedAlreadyRef = useRef(false); //Let's us know if we've rendered it already or not
 
     useEffect(() => {
         //We'll be using this to see if allWorkers.workers has been updated. We also use the ref renderedAlreadyRef to ensure it only runs after rendering
-        if (renderedAlreadyRef.current === true && allWorkers.errors === ""){
+        if (renderedAlreadyRef.current === true && Object.keys(errors).length === 0){
             setSuccessMessage("Worker created successfully");
         }
-        else{
-            setSuccessMessage(null);
-        }
-    }, [allWorkers])
+    }, [errors])
 
     const handleSubmit = (e) => {
         //Handles submitting the form
@@ -65,7 +62,7 @@ const New = () => {
                             <input type="text" defaultValue={worker.name} id="name" onChange={e => handleChange(e)}></input>
                         </label>
                         <label>
-                            Worker Email: 
+                            Worker Email:  
                             <input type="text" defaultValue={worker.email} id="email" onChange={e => handleChange(e)}></input>
                         </label>
                         <label>
@@ -78,7 +75,6 @@ const New = () => {
                         <button type="submit" onClick={e => handleSubmit(e)} className="submit_new_button">Submit</button>
                     </form>
                     <h3 className='new_messages'>{successMessage}</h3>
-                    <h3 className='new_messages'>{allWorkers.errors}</h3>
                 </>
             )
         }

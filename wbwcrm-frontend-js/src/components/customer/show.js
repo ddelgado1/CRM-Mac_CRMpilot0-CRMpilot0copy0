@@ -43,12 +43,12 @@ const Show = () => {
                     </div>
                 )
             }
-            if (key === "customer_title"){
+            if (key === "contact_title"){
                 divs.push(
                 <div key="workers" className='show_h2_div'>
                     <h2>Workers</h2>
                     {selectedWorkers.map((worker, index) =>{
-                        return(<h3 key={worker + `${index}`}>{worker.label}</h3>)
+                        return(<h3 key={worker + `${index}`}>{worker}</h3>)
                     })}
                 </div>
                 )

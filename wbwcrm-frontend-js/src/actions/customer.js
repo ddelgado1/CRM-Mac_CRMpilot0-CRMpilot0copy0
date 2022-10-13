@@ -36,17 +36,12 @@ export const updateNotes = (note_data) => dispatch => {
 }
 
 export const destroyCustomer = (customer_id) => dispatch => {
-  //This deletes the customer
+  //This deletes the customer as well as the worker_customers associated with it
   
   axios.post(`http://localhost:3001/customers/destroy`, {id: customer_id})
   .then(() => {
     dispatch({type: 'CUSTOMER_DESTROYED', payload: customer_id});
-    axios.post(`http://localhost:3001/workerCustomers/destroy`, {id: customer_id}) //I'm scared that the first thing will run but the second one won't, causing a lot of problems. We can deal with this by just throwing a big error message for the user hopefully
-    .then(() => {
-      dispatch({type: 'WORKER_CUSTOMER_ROWS_DESTROYED', payload: customer_id});
-    })
-    .catch(err => dispatch({type: 'ERROR_CAUGHT', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}}))
-  
+    dispatch({type: 'WORKER_CUSTOMER_ROWS_DESTROYED', payload: customer_id});  
     })
   .catch(err => dispatch({type: 'ERROR_CAUGHT', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}}))
 }

@@ -21,14 +21,7 @@ class WorkerCustomer{
         // Will give us a specific element based on the id 
         return db.execute('SELECT * FROM workerCustomers WHERE workerCustomers.id = ?', [element_id]);
     }
-
-    static deleteMe(customer_id){
-        //Uses SQL to delete an individual customer element
-        return db.execute('DELETE FROM workercustomers WHERE workerCustomers.customer_id = ?', [customer_id]);
-    }
-
-    
-    
+     
 }
 
 export default WorkerCustomer;

@@ -22,8 +22,7 @@ Need to make it so that we have a proper join table with cascading (most likely)
 
 - Calendar
     - Just have to do the create event thing then we're done!
-        - My concern with this is that it doesn't make sense from a functionality standpoint. It is way easier to just go to the outlook website and create the event there. I can, I guess, comprehend having the calendar there but I just don't 
-        think my website will be more efficient than just opening a new tab
+    - Also need to implement recurring events in my calendarDisplay component
 
 Back end:
 

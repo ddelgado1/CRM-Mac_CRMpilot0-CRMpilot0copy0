@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getCalendarInformation } from '../../actions/calendar.js';
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -16,7 +17,8 @@ const OutlookCalendar = (props) => {
   const { instance, accounts } = useMsal();
     
   const dispatch = useDispatch();
-  const calendar_info = useSelector((state) => state.workers.calendar_info) // Here are all of the customers
+  const navigate = useNavigate();
+  const calendar_info = useSelector((state) => state.calendar.calendar_info) // Here are all of the calendar events
   const calendarViableRef = useRef([]); // In the useEffect, we will add elements to this to have a list of viable elements
   const [calendarClassName, setCalendarClassName] = useState("normal");
   const [eventChosenDiv, setEventChosenDiv] = useState(null);
@@ -49,7 +51,7 @@ const OutlookCalendar = (props) => {
 
   const handleNewEventClick = (e) => {
     // This is the function that takes us to the page to create a new event that we will add to our calendar
-    console.log(e)
+    navigate("/event_create")
   }
 
   const handleEventClicked = (e) => {
