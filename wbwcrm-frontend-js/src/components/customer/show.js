@@ -23,7 +23,7 @@ const Show = () => {
 
 
     useEffect(() => {
-        //When the customer gets deleted (if there are no errors), we navigate to the main page
+        //When the customer gets deleted (if there are no errors) or we reload the page, we navigate to the main page
         if (Object.keys(customerChosen).length === 0){
             if (Object.keys(errors).length === 0){
                 navigate("/customers");
@@ -42,13 +42,13 @@ const Show = () => {
                         <h3 key={key + 'h3'}>{customerChosen[key]}</h3>
                     </div>
                 )
-            }
+            } 
             if (key === "contact_title"){
                 divs.push(
                 <div key="workers" className='show_h2_div'>
                     <h2>Workers</h2>
                     {selectedWorkers.map((worker, index) =>{
-                        return(<h3 key={worker + `${index}`}>{worker}</h3>)
+                        return(<h3 key={worker.value + `${index}`}>{worker.label}</h3>)
                     })}
                 </div>
                 )

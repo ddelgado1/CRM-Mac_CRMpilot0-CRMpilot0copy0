@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createWorker } from '../../actions/worker';
 
@@ -16,26 +16,19 @@ const New = () => {
     );
 
     const [checked, setChecked] = useState(false); //Determines if admin checkbox is checked or not
-    const [successMessage, setSuccessMessage] = useState(null); //If there's a success in the uploading process, we simply will put a message at the bottom.
 
     const dispatch = useDispatch();
     const errors = useSelector((state) => state.errors.error);
     const selectedWorker = useSelector((state) => state.workers.current_worker); //We will be using this to determine if the user has a right to access this page
  
-    const renderedAlreadyRef = useRef(false); //Let's us know if we've rendered it already or not
+    const [renderedAlready, setRenderedAlready] = useState(false); // Will determine if it's been rendered already so we don't need to worry about the message popping up immediately on render
 
-    useEffect(() => {
-        //We'll be using this to see if allWorkers.workers has been updated. We also use the ref renderedAlreadyRef to ensure it only runs after rendering
-        if (renderedAlreadyRef.current === true && Object.keys(errors).length === 0){
-            setSuccessMessage("Worker created successfully");
-        }
-    }, [errors])
 
     const handleSubmit = (e) => {
         //Handles submitting the form
         e.preventDefault();
+        setRenderedAlready(true)
         dispatch(createWorker(worker));
-        renderedAlreadyRef.current = true;
     }
 
 
@@ -74,7 +67,7 @@ const New = () => {
                         </label>
                         <button type="submit" onClick={e => handleSubmit(e)} className="submit_new_button">Submit</button>
                     </form>
-                    <h3 className='new_messages'>{successMessage}</h3>
+                    <h3 className='new_messages'>{renderedAlready === true && Object.keys(errors).length === 0 ? "Worker created successfully" : null}</h3>
                 </>
             )
         }

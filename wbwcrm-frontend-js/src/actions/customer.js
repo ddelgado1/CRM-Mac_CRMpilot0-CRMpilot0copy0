@@ -11,12 +11,8 @@ export const createCustomer = (customer_information, selected_workers) => dispat
   //Does exactly what it says it does
   axios.post("http://localhost:3001/customers", {customer: customer_information, workers: selected_workers})
   .then(response => {
-    dispatch({ type: 'CREATE_NEW_CUSTOMER', payload: {customer: response.data.customer[0], workers: response.data.workers}}) 
-    axios.post("http://localhost:3001/workerCustomers", {customer_id: response.data.customer[0].id, workers: response.data.workers})
-      .then(response => { 
-          dispatch({ type: 'CREATE_NEW_WORKER_CUSTOMERS', payload: response.data })
-      })
-      .catch(err => dispatch({type: 'ERROR_CAUGHT', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}}))
+    dispatch({ type: 'CREATE_NEW_CUSTOMER', payload: {customer: response.data.customer[0], workers: selected_workers}}) 
+    dispatch({ type: 'CREATE_NEW_WORKER_CUSTOMERS', payload: response.data.new_worker_customers })
   })
   .catch(err => {
     dispatch({type: 'ERROR_CAUGHT', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}})
@@ -30,7 +26,6 @@ export const lookAtSpecificCustomer = (customer_information, workers) => dispatc
 
 export const updateNotes = (note_data) => dispatch => {
   //Since we will be defaulting with the notes already blank, we only need patch This both sends the data to the back end as well as updates the current notes on the front end
-  console.log(note_data)
   dispatch({type: 'NOTE_UPDATED', payload: note_data})
   axios.post(`http://localhost:3001/customers/update`, {value: note_data.value, id: note_data.id})
 }

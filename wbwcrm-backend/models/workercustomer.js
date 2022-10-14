@@ -7,11 +7,6 @@ class WorkerCustomer{
         this.worker_id = worker_id;
     }
     
-    save(){
-        /* The purpose of this function is to save a new element to the database. */
-        return db.execute(`INSERT INTO workercustomers (customer_id, worker_id) VALUES(?, ?)`, [this.customer_id, this.worker_id]);
-    }
-
     static all(){
         /* Will give us all of the elements within the database */
         return db.execute('SELECT * FROM workercustomers');

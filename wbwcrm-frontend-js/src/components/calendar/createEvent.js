@@ -27,6 +27,7 @@ const CreateEvent = () => {
                 displayName: ''
             },
             reminderMinutesBeforeStart: null,
+            isReminderOn: false,
             attendees: [],
             isOnlineMeeting: false
           });
@@ -62,7 +63,7 @@ const CreateEvent = () => {
         const newKey = e.target.id;
         const newValue = e.target.value;
         if (newKey === "reminderMinutesBeforeStart" && newValue === "Default"){
-            // We leave nothing here since we want nothing to happen here
+            setEventData(oldState => ({...oldState, isReminderOn: false}));
         }
         else{
             setEventData(oldState => ({ ...oldState, [newKey]: newValue}));

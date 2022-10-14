@@ -24,14 +24,9 @@ export const create = (req, res) => {
         
         else{
             (customer.customerValidator() && req.body.workers.length !== 0) ? 
-            customer.save()
-            .then((result) => {
-                Customer.findByID(result[0].insertId)
-                .then(([new_customer]) =>{
-                    res.json({customer: new_customer, workers: req.body.workers})
-                })
-                .catch(err => res.status(500).json({message: "We had some trouble saving on our end. Please try to reload page and try again"}))
-                
+            customer.save(req.body.workers)
+            .then(([new_customer, new_worker_customers]) => {
+                res.json({customer: new_customer[0], new_worker_customers: new_worker_customers[0]})
             })
             .catch(err => res.status(500).json({message: "We had some trouble saving on our end. Please try to reload page and try again"}))
             :

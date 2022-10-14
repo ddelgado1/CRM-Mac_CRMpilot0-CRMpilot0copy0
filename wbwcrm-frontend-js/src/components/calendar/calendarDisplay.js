@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getCalendarInformation } from '../../actions/calendar.js';
@@ -11,6 +11,7 @@ import { useMsal } from "@azure/msal-react";
 import { loginRequest } from '../../authConfig.js';
 
 import "./calendar scsses/styles.scss"; //Just how to style it ya know?
+
 const localizer = momentLocalizer(moment);
 
 const OutlookCalendar = (props) => {
@@ -19,7 +20,6 @@ const OutlookCalendar = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const calendar_info = useSelector((state) => state.calendar.calendar_info) // Here are all of the calendar events
-  const calendarViableRef = useRef([]); // In the useEffect, we will add elements to this to have a list of viable elements
   const [calendarClassName, setCalendarClassName] = useState("normal");
   const [eventChosenDiv, setEventChosenDiv] = useState(null);
 
@@ -39,14 +39,6 @@ const OutlookCalendar = (props) => {
           dispatch(getCalendarInformation(accessToken))
         })
   }, [instance, accounts, dispatch]);
-  useEffect(() => {
-    //This is to make the data in the calendar_info variable viable for the events in the Calendar component
-    if (calendar_info.length !== 0){
-      calendarViableRef.current = calendar_info.map(element => {
-        return {title: element.title, allDay: element.isAllDay, start: moment(element.start).toDate(), end: moment(element.end).toDate(), id: element.id}
-      })
-    }
-  }, [calendar_info])
 
 
   const handleNewEventClick = (e) => {
@@ -110,13 +102,15 @@ const OutlookCalendar = (props) => {
   }
 
   return(
-    calendarViableRef.current.length !== 0 ? 
+    calendar_info.length !== 0 ? 
     <div>
       {eventChosenDiv}
       <div id="calendar_component" className={calendarClassName}>
         <Calendar
           localizer={localizer}
-          events={calendarViableRef.current}
+          events={calendar_info.map(element => {
+            return {title: element.title, allDay: element.isAllDay, start: moment(element.start).toDate(), end: moment(element.end).toDate(), id: element.id}
+          })}
           onSelectEvent={e => handleEventClicked(e)}
           startAccessor="start"
           endAccessor="end"

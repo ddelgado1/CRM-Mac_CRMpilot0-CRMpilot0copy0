@@ -27,12 +27,37 @@ class Customer{
         this.notes = notes;
         
     }
-    save(){
-    // The purpose of this function is to save a new element to the database.
-    return db.execute(`INSERT INTO customers (company, contact_name, contact_email, contact_phone_number, contact_title, old_address, new_address, category, broker_name, broker_company,
-        broker_number, broker_email, architect_name, architect_company, architect_number, architect_email, consultant_name, consultant_company, consultant_number, consultant_email, notes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [this.company, this.contact_name, this.contact_email, this.contact_phone_number, this.contact_title, this.old_address, this.new_address, this.category, this.broker_name, this.broker_company, this.broker_number, this.broker_email,
-        this.architect_name, this.architect_company, this.architect_number, this.architect_email, this.consultant_name, this.consultant_company, this.consultant_number, this.consultant_email, this.notes]);
+    async save(worker_list){
+        // The purpose of this function is to save a new element to the database.
+        const connection = await db.getConnection(); //acts as a means of using a connection so we can use transactions
+        try{
+            await connection.beginTransaction();
+            const newCustomer = await connection.execute(`INSERT INTO customers (company, contact_name, contact_email, contact_phone_number, contact_title, old_address, new_address, category, broker_name, broker_company,
+                broker_number, broker_email, architect_name, architect_company, architect_number, architect_email, consultant_name, consultant_company, consultant_number, consultant_email, notes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [this.company, this.contact_name, this.contact_email, this.contact_phone_number, this.contact_title, this.old_address, this.new_address, this.category, this.broker_name, this.broker_company, this.broker_number, this.broker_email,
+                this.architect_name, this.architect_company, this.architect_number, this.architect_email, this.consultant_name, this.consultant_company, this.consultant_number, this.consultant_email, this.notes]);
+            
+            if (!newCustomer){
+                await connection.rollback();
+                connection.release();
+                return;
+            };
+            const workerCustomerIDs = [];
+            for (const worker of worker_list){
+                let newWorkerCustomer = await connection.execute(`INSERT INTO workercustomers (customer_id, worker_id) VALUES(?, ?)`, [newCustomer[0].insertId, worker.value]);
+                workerCustomerIDs.push(newWorkerCustomer[0].insertId);
+            };
+            await connection.commit();
+            const foundCustomer = await connection.execute('SELECT * FROM customers WHERE customers.id = ?', [newCustomer[0].insertId]);
+            const allWorkerCustomers = await connection.execute(`SELECT * FROM workercustomers WHERE workercustomers.id IN ( ${workerCustomerIDs.slice(0, -1).join(", ") + workerCustomerIDs.slice(-1)})`);
+            connection.release();
+            return [foundCustomer, allWorkerCustomers];
+
+        }
+        catch(err){
+            await connection.rollback();
+            return err;
+        }
     }
 
     customerValidator(){
@@ -61,13 +86,18 @@ class Customer{
 
     static async deleteMe(customer_id){
         //Uses SQL to delete an individual customer element
+        const connection = await db.getConnection(); //acts as a means of using a connection so we can use transactions
         try {
-            await db.execute('DELETE FROM customers WHERE id = ?', [customer_id]);
-            await db.execute('DELETE FROM workercustomers WHERE workerCustomers.customer_id = ?', [customer_id]);
-            await db.execute("COMMIT");
+            await connection.beginTransaction();
+            await connection.execute('DELETE FROM customers WHERE id = ?', [customer_id]);
+            await connection.execute('DELETE FROM workercustomers WHERE workerCustomers.customer_id = ?', [customer_id]);
+            await connection.commit();
+            connection.release();
+            return;
         }
         catch (err){
-            await db.execute("ROLLBACK")
+            await connection.rollback();
+            return err;
         } 
     }
 
