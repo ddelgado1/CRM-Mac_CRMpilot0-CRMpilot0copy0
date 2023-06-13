@@ -34,3 +34,18 @@ Back end:
 
 Done!
 >>>>>>> d2dc2fe594b5583649d3d98e47ef173b886419a5
+
+Things to do:
+
+Design:
+
+- First we need to make it look good. That's our number one job
+    - Use bootstrap maybe
+
+Others:
+
+    - Change it so that you don't need to input name for user (since we already have a means of putting it in based on their email then getting that user.)
+
+    - Set up a profile page for the workers
+
+    - Make the calendar work
