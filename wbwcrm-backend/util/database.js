@@ -1,10 +1,11 @@
 import mysql from 'mysql2';
+require('dotenv').config();
 
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     database: 'wbw-crm',
-    password: 'Cowl@ndm@n1'
+    password: 'B0Ad@EGTXAc6'
 });
 
 export default pool.promise();
