@@ -27,3 +27,13 @@ export const setCurrentWorker = (worker_information) => dispatch => {
   dispatch({type: 'SET_CURRENT_WORKER', payload: worker_information});
 }
 
+export const destroyWorker = (worker_id) => dispatch => {
+  //This deletes the worker as well as the worker_customers associated with it
+  
+  axios.post(`http://localhost:3001/workers/destroy`, {id: worker_id})
+  .then(() => {
+    dispatch({type: 'WORKER_DESTROYED', payload: worker_id});
+    dispatch({type: 'WORKER_CUSTOMER_ROWS_DESTROYED', payload: worker_id});  
+    })
+  .catch(err => dispatch({type: 'ERROR_CAUGHT', payload: {err_message: err.response.data.message, err_code: err.response.request.status, err_value: err.response.request.statusText}}))
+}

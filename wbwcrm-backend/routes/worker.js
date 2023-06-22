@@ -7,5 +7,7 @@ workerRouter.get('/', index);
 
 workerRouter.post('/', create);
 
+// customerRouter.post('/destroy',destroy);
+
 
 export default workerRouter;

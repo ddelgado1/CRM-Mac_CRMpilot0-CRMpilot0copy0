@@ -37,6 +37,7 @@ root.render(
                     <Route path="customer" element={<Show />} />
                     <Route path="search" element={<Search />} />
                     <Route path="new_worker" element={<NewWorker />} />
+                    <Route path="destroy_worker" element={<DestroyWorker />} />
                     <Route path="calendar" element={<OutlookCalendarDisplay />} />
                     <Route path="event_create" element={<OutlookCalendarEventCreate />} />
                   </Route>

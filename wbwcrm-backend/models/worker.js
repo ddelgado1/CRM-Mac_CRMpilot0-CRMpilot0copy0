@@ -31,6 +31,23 @@ class Worker{
         /* Will give us all of the elements within the database */
         return db.execute('SELECT * FROM workers');
     }
+
+    // static async deleteMe(worker_id){
+    //     //Uses SQL to delete an individual customer element
+    //     const connection = await db.getConnection(); //acts as a means of using a connection so we can use transactions
+    //     try {
+    //         await connection.beginTransaction();
+    //         await connection.execute('DELETE FROM workers WHERE id = ?', [worker_id]);
+    //         await connection.execute('DELETE FROM workercustomers WHERE workerCustomers.worker_id = ?', [worker_id]);
+    //         await connection.commit();
+    //         connection.release();
+    //         return;
+    //     }
+    //     catch (err){
+    //         await connection.rollback();
+    //         return err;
+    //     } 
+    // }
     
 }
 

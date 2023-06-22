@@ -38,3 +38,11 @@ export const create = (req, res) => {
     .catch(() => res.status(500).json({message: "There is already a worker with this email registered"}))
     }
 
+
+
+// export const destroy = (req, res) => {
+//     // Here is when we want to remove an existing customer
+//     Worker.deleteMe(req.body.id)
+//     .then(() => res.json("Worker deleted"))
+//     .catch((err) => res.status(500).json({message: "Something went wrong when trying to delete this. Try and reload the page and try again "}))
+// }
