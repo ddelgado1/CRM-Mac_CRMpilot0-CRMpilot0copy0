@@ -54,3 +54,9 @@ Others:
 
 The problem that Danny was having was because he changed the DB password. The new issue, though, is if you sign in as someone not in the system, if you then switch to someone who is, you're still not allowed in. 
 
+I also need to get the azure code directly since I went to an earlier build. For some reason, it doesn't have a post request for workercustomers
+
+
+Notes for dad:
+
+- Ask about the abbreviations

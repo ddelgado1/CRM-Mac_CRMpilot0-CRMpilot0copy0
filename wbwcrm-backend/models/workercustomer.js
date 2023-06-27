@@ -16,6 +16,11 @@ class WorkerCustomer{
         // Will give us a specific element based on the id 
         return db.execute('SELECT * FROM workerCustomers WHERE workerCustomers.id = ?', [element_id]);
     }
+
+    save(worker_id, customer_id){
+        // The purpose of this function is to save a new element to the database.
+        return db.execute(`INSERT INTO workercustomers (customer_id, worker_id) VALUES(?, ?)`, [customer_id, worker_id])
+    }
      
 }
 
