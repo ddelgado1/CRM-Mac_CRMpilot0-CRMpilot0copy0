@@ -101,6 +101,11 @@ class Customer{
         } 
     }
 
+    // In Customer model -DD 11/1/23 changes for filtering info based on role
+static findByWorker(workerId) {
+    return db.execute('SELECT * FROM customers WHERE workerId = ?', [workerId]);
+  }
+
     
     
 }

@@ -1,6 +1,16 @@
 
 import Customer from '../models/customer.js';
 
+// Your function to extract worker ID from token
+const extractWorkerIdFromToken = (authHeader) => {
+    // Implement this function
+    return "someWorkerId";
+  };
+// Your function to get worker role
+const getWorkerRole = (workerId) => {
+    // Implement this function
+    return "administrator";
+  };
 
 export const index = (req, res) =>{
     const workerId = extractWorkerIdFromToken(req.headers['Authorization']); // Implement this function
@@ -23,7 +33,7 @@ export const index = (req, res) =>{
     }
   };
 
-
+/*
 
 export const index = (req, res) =>{
     // The index method for customers that gives us all of them
@@ -33,7 +43,7 @@ export const index = (req, res) =>{
     })
     .catch(err => res.status(500).json({message: "Something went wrong on our end. Try to reload the page and start again"}));
 };
-
+*/
 export const create = (req, res) => {
     const customer = new Customer(
         null, req.body.customer.company, req.body.customer.contact_name, req.body.customer.email, req.body.customer.number, req.body.customer.title, req.body.customer.old_address, req.body.customer.new_address, req.body.customer.category,  
