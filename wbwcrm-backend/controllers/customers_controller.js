@@ -1,6 +1,30 @@
 
 import Customer from '../models/customer.js';
 
+
+export const index = (req, res) =>{
+    const workerId = extractWorkerIdFromToken(req.headers['Authorization']); // Implement this function
+    const workerRole = getWorkerRole(workerId); // Implement this function
+  
+    if (workerRole === 'administrator') {
+      // Return all customer data
+      Customer.all()
+      .then(([rows, fieldData]) => {
+        res.json(rows);
+      })
+      .catch(err => res.status(500).json({message: "Something went wrong on our end. Try to reload the page and start again"}));
+    } else {
+      // Return only customer data owned by the worker
+      Customer.byWorker(workerId)
+      .then(([rows, fieldData]) => {
+        res.json(rows);
+      })
+      .catch(err => res.status(500).json({message: "Something went wrong on our end. Try to reload the page and start again"}));
+    }
+  };
+
+
+
 export const index = (req, res) =>{
     // The index method for customers that gives us all of them
     Customer.all()
