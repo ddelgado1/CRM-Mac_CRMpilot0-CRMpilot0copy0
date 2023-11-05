@@ -13,8 +13,14 @@ const getWorkerRole = (workerId) => {
   };
 
 export const index = (req, res) =>{
-    const workerId = extractWorkerIdFromToken(req.headers['Authorization']); // Implement this function
-    const workerRole = getWorkerRole(workerId); // Implement this function
+    // const workerId = extractWorkerIdFromToken(req.headers['Authorization']); // Implement this function
+    // const workerRole = getWorkerRole(workerId); // Implement this function
+
+    const workerId = req.headers['worker-id']; // Or req.body.workerId or req.query.workerId
+    const workerRole = req.headers['worker-role']; // Similarly, this can be from the body or query
+
+    // const workerId = req.body.workerId; // Fetching from request body DD 11/2/23
+    // const workerRole = req.body.role; // Fetching role from request body DD 11/2/23
   
     if (workerRole === 'administrator') {
       // Return all customer data
