@@ -1,9 +1,10 @@
 import express from 'express';
-import { index } from '../controllers/worker_customers_controller.js';
+import { allCustomers, index } from '../controllers/worker_customers_controller.js';
 
 const workerCustomersRouter = express.Router();
 
 workerCustomersRouter.get('/', index);
+workerCustomersRouter.get('/:workerId', allCustomers);
 
 
 
