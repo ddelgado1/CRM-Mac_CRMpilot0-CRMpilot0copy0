@@ -2,7 +2,7 @@ import mysql from 'mysql2';
 import fs from "fs";
 const serverCa = [fs.readFileSync("./DigiCertGlobalRootCA.crt.pem", "utf8")];
 const pool = mysql.createPool({
-    host: 'wbw-crm.mysql.database.azure.com',
+    host: 'wbw-crm-cpy-restore-test.mysql.database.azure.com',
     user: 'zach6585',
     database: 'wbwcrmdata',
     password: process.env["databasepassword"],

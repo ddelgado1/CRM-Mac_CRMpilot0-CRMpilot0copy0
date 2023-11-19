@@ -15,29 +15,58 @@ class WorkerCustomer{
     static allCustomers(workerId){
         /* Will give us all of the elements within the database */
         return db.execute(`
-            SELECT 
-        c.id AS customer_id,
+        SELECT 
         c.company,
-        c.contact_name,
-        CASE 
-            WHEN wc.id IS NOT NULL AND wc.worker_id = ${workerId} THEN c.contact_email
-            ELSE 'N/A'
-        END AS contact_email,
-        CASE 
-            WHEN wc.id IS NOT NULL AND wc.worker_id = ${workerId} THEN c.contact_phone_number
-            ELSE 'N/A'
-        END AS contact_phone_number,
-        -- c.contact_title,
-        c.category,
-        w.name
+        GROUP_CONCAT(DISTINCT w.name ORDER BY c.id ASC) AS worker_names,
+        GROUP_CONCAT(DISTINCT c.id ORDER BY c.id ASC) AS customer_ids,
+        GROUP_CONCAT(DISTINCT c.contact_name ORDER BY c.id ASC) AS contact_names,
+        GROUP_CONCAT(DISTINCT 
+            CASE 
+                WHEN wc.id IS NOT NULL AND wc.worker_id = ${workerId} THEN c.contact_email
+                ELSE 'N/A'
+            END
+            ORDER BY c.id ASC
+        ) AS contact_emails,
+        GROUP_CONCAT(DISTINCT 
+            CASE 
+                WHEN wc.id IS NOT NULL AND wc.worker_id = ${workerId} THEN c.contact_phone_number
+                ELSE 'N/A'
+            END
+            ORDER BY c.id ASC
+        ) AS contact_phone_numbers,
+        c.category
     FROM 
         customers c
     LEFT JOIN 
         workercustomers wc ON c.id = wc.customer_id
     LEFT JOIN
-        workers w ON wc.worker_id = w.id;
-            `);
-        // return db.execute('SELECT * FROM workercustomers');
+        workers w ON wc.worker_id = w.id
+    GROUP BY 
+        c.company, c.category;            `);
+    //     return db.execute(`
+    //         SELECT 
+    //     c.id AS customer_id,
+    //     c.company,
+    //     c.contact_name,
+    //     CASE 
+    //         WHEN wc.id IS NOT NULL AND wc.worker_id = ${workerId} THEN c.contact_email
+    //         ELSE 'N/A'
+    //     END AS contact_email,
+    //     CASE 
+    //         WHEN wc.id IS NOT NULL AND wc.worker_id = ${workerId} THEN c.contact_phone_number
+    //         ELSE 'N/A'
+    //     END AS contact_phone_number,
+    //     -- c.contact_title,
+    //     c.category,
+    //     w.name
+    // FROM 
+    //     customers c
+    // LEFT JOIN 
+    //     workercustomers wc ON c.id = wc.customer_id
+    // LEFT JOIN
+    //     workers w ON wc.worker_id = w.id;
+    //         `);
+        
     }
 
     static findByID(element_id){
