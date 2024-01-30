@@ -51,11 +51,19 @@ export const index = (req, res) =>{
 };
 */
 export const create = (req, res) => {
-  const customer = new Customer(
+  console.log("Req Body ==> ", req.body.customer);
+  /*const customer = new Customer(
     null, req.body.customer.company, req.body.customer.contact_name, req.body.customer.email, req.body.customer.number, req.body.customer.title, req.body.customer.old_address, req.body.customer.new_address, req.body.customer.category,
     req.body.customer.broker_name, req.body.customer.broker_company, req.body.customer.broker_number, req.body.customer.broker_email, req.body.customer.architect_name, req.body.customer.architect_company, req.body.customer.architect_number, req.body.customer.architect_email,
     req.body.customer.consultant_name, req.body.customer.consultant_company, req.body.customer.consultant_number, req.body.customer.consultant_email, ""
+  ) */
+
+  const customer = new Customer(
+    null, req.body.customer.company, req.body.customer.contact_name, req.body.customer.email, req.body.customer.number, req.body.customer.title, req.body.customer.category, ""
   )
+
+
+  console.log("New Customer ==> ", customer);
   Customer.companyValidator(customer.company)
     .then(([found_customer_element]) => {
       if (found_customer_element.length !== 0) {
